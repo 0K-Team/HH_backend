@@ -1,8 +1,12 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import routes from "./routes";
+import mongoose from "mongoose";
+import "dotenv/config";
 
 dotenv.config();
+
+mongoose.connect(process.env.MONGODB_URL as string)
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
