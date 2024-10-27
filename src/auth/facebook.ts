@@ -24,7 +24,7 @@ passport.use(new FacebookStrategy({
     const { id, username, emails } = profile;
     if (!emails) return done("No email found", false);
     const email = emails[0].value;
-    const user = await AccountData.findByIdAndUpdate(new Array(Math.floor(Math.random() * 15)).fill(0).map(_ => Math.floor(Math.random() * 10)).join(""), {
+    const user = await AccountData.findByIdAndUpdate(new Array(15).fill(0).map(_ => Math.floor(Math.random() * 10)).join(""), {
         email,
         name: username,
         avatarHash: "",
