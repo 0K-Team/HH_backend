@@ -1,16 +1,16 @@
+import { BlobClient } from '@azure/storage-blob';
 import { containerClient } from '../azureBlobClient';
-import { Response } from 'express';
+import { Writable } from 'stream';
 
-const getAvatar = async (filename: string, res: Response) => {
-  const blockBlobClient = containerClient.getBlockBlobClient(filename);
+const getAvatar = async (filename: string, writableStream: Writable) => {
+  const blobClient: BlobClient = await containerClient.getBlobClient(filename);
 
-  const downloadBlockBlobResponse = await blockBlobClient.download(0);
-  if (downloadBlockBlobResponse.readableStreamBody) {
-    // Pipe the readable stream directly to the response
-    downloadBlockBlobResponse.readableStreamBody.pipe(res);
-  } else {
-    res.status(404).json({ error: 'File not found' });
+  const downloadResponse = await blobClient.download();
+
+  if (!downloadResponse.errorCode && downloadResponse?.readableStreamBody) {
+    downloadResponse.readableStreamBody.pipe(writableStream);
+    console.log(`download of ${filename} succeeded`);
   }
-};
+}
 
 export default getAvatar;

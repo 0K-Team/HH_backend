@@ -4,7 +4,7 @@ import uploadAvatar from '../avatars/uploadAvatar';
 
 const router = express.Router();
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/uploadAvatar', async (req: Request, res: Response) => {
   try {
     // Create a buffer from the incoming request
     const chunks: Buffer[] = [];

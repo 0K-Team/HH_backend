@@ -4,7 +4,7 @@ import getAvatar from '../avatars/getAvatar';
 
 const router = express.Router();
 
-router.get('/:filename', async (req: Request, res: Response) => {
+router.get('/getAvatar/:filename', async (req: Request, res: Response) => {
   try {
     await getAvatar(req.params.filename, res);
   } catch (error) {
