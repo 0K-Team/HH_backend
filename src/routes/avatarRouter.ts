@@ -1,10 +1,20 @@
-// src/routes/uploadFile.ts
+// src/routes/getFile.ts
 import express, { Request, Response } from 'express';
+import getAvatar from '../avatars/getAvatar';
 import uploadAvatar from '../avatars/uploadAvatar';
 
 const router = express.Router();
 
-router.post('/uploadAvatar', async (req: Request, res: Response) => {
+router.get('/:filename', async (req: Request, res: Response) => {
+  try {
+    res.setHeader('Content-Type', 'image/jpeg'); // Set the appropriate content type for the image
+    await getAvatar(req.params.filename, res);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+});
+
+router.post('/', async (req: Request, res: Response) => {
   try {
     // Create a buffer from the incoming request
     const chunks: Buffer[] = [];

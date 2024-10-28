@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGODB_URL as string)
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-app.use("/api", routes);
+app.use("/", routes);
 
 app.use(passport.initialize());
 app.use(session({

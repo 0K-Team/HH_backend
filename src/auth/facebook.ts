@@ -19,7 +19,7 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID as string,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
-    callbackURL: "/api/user/auth/facebook/callback"
+    callbackURL: "/user/auth/facebook/callback"
 }, async (_accessToken, _refreshToken, profile, done) => {
     const { id, username, emails } = profile;
     if (!emails) return done("No email found", false);
