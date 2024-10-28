@@ -19,16 +19,27 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID as string,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
-    callbackURL: "/user/auth/facebook/callback"
+    callbackURL: "/user/auth/facebook/callback",
+    profileFields: [
+        "id",
+        "email",
+        "displayName",
+        "name",
+        "picture.type(large)"
+    ]
 }, async (_accessToken, _refreshToken, profile, done) => {
-    const { id, username, emails } = profile;
+    const { username, emails, id, name } = profile;
     if (!emails) return done("No email found", false);
     const email = emails[0].value;
-    const user = await AccountData.findByIdAndUpdate(new Array(15).fill(0).map(_ => Math.floor(Math.random() * 10)).join(""), {
-        email,
-        name: username,
-        avatarHash: "",
-        providerID: id
+    const user = await AccountData.findOneAndUpdate({
+        email
+    }, {
+        $setOnInsert: {
+            username,
+            provider: "facebook",
+        },
+        fullName: name,
+        facebookID: id
     }, {
         upsert: true,
         new: true

@@ -1,20 +1,45 @@
 import { Schema, model } from "mongoose";
 
-const accountSchema = new Schema({
+export const accountSchema = new Schema({
+    id: {
+        type: String,
+        required: true,
+        unique: true,
+        default: () => new Array(15).fill(0).map(_ => Math.floor(Math.random() * 10)).join("")
+    },
     email: {
         type: String,
         required: true,
     },
-    name: {
+    username: {
         type: String,
         required: true,
+    },
+    fullName: {
+        type: {
+            givenName: String,
+            familyName: String
+        },
+        required: true
     },
     avatarHash: {
         type: String,
         required: true
     },
-    providerID: {
-        type: String
+    provider: {
+        type: String,
+        enum: ["google", "facebook"],
+        required: true
+    },
+    googleID: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    facebookID: {
+        type: String,
+        unique: true,
+        sparse: true
     },
     points: Number
 });

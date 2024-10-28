@@ -19,16 +19,21 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID as string,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    callbackURL: "/user/auth/google/callback"
+    callbackURL: "/user/auth/google/callback",
+    scope: ["email", "profile"]
 }, async (_accessToken, _refreshToken, profile, done) => {
-    const { id, username, emails } = profile;
+    const { id, username, emails, name } = profile;
     if (!emails) return done("No email found", false);
     const email = emails[0].value;
-    const user = await AccountData.findByIdAndUpdate(new Array(15).fill(0).map(_ => Math.floor(Math.random() * 10)).join(""), {
-        email,
-        name: username,
-        avatarHash: "",
-        providerID: id
+    const user = await AccountData.findOneAndUpdate({
+        email
+    }, {
+        $setOnInsert: {
+            username,
+            provider: "google",
+        },
+        fullName: name,
+        googleID: id
     }, {
         upsert: true,
         new: true
