@@ -17,6 +17,8 @@ mongoose.connect(process.env.MONGODB_URL as string)
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
+app.set('trust proxy', 1);
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
