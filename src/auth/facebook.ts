@@ -19,7 +19,7 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID as string,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
-    callbackURL: "/v1/user/auth/facebook/callback",
+    callbackURL: "/api/v1/user/auth/facebook/callback",
     profileFields: [
         "id",
         "email",
