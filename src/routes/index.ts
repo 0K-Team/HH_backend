@@ -12,6 +12,6 @@ router.use("/avatar", avatarRouter);
 
 router.use("/blog", blogRouter);
 
-router.use("/post", postsRouter);
+router.use("/posts", postsRouter);
 
 export default router;
