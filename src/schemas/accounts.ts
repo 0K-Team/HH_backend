@@ -59,12 +59,7 @@ export const accountSchema = new Schema({
         }
     ],
     skills: [String],
-    bages: [
-        {
-            name: String,
-            description: String
-        }
-    ],
+    badges: [String],
     location: String,
     preferred_topics: [String],
     points: Number
