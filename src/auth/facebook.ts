@@ -29,8 +29,7 @@ passport.use(new FacebookStrategy({
     ]
 }, async (_accessToken, _refreshToken, profile, done) => {
     const { username, emails, id, name } = profile;
-    if (!emails) return done("No email found", false);
-    const email = emails[0].value;
+    const email = emails?.[0]?.value;
     const user = await AccountData.findOneAndUpdate({
         email
     }, {

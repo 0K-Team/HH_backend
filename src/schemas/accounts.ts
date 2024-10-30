@@ -9,7 +9,7 @@ export const accountSchema = new Schema({
     },
     email: {
         type: String,
-        required: true,
+        required: false,
     },
     username: {
         type: String,
