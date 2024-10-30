@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookie());
 app.use(passport.initialize());
 
-app.use("/api/v1/", routes);
+app.use("/v1/", routes);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
