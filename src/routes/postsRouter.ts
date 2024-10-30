@@ -7,8 +7,8 @@ import { PostValidator } from "../validators";
 const router = Router();
 
 router.get("/", async (req, res) => {
-    const page = parseInt(req.query.page as string) ?? 1; 
-    const limit = parseInt(req.query.limit as string) ?? 10;
+    const page = parseInt(req.query.page as string) || 1; 
+    const limit = parseInt(req.query.limit as string) || 10;
     if (page < 1) return res.status(400), undefined;
     if (limit > 100) return res.status(400), undefined;
 
