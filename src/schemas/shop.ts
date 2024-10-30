@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-export const shopSchema = new Schema({
+const shopSchema = new Schema({
     items: [
         {
             name: {
