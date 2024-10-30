@@ -41,6 +41,32 @@ export const accountSchema = new Schema({
         unique: true,
         sparse: true
     },
+    title: {
+        name: String,
+    },
+    notifications: [
+        {
+            title: String,
+            date: Date
+        }
+    ],
+    friends: [String],
+    bio: String,
+    achievements: [
+        {
+            name: String,
+            date_awarded: Date
+        }
+    ],
+    skills: [String],
+    bages: [
+        {
+            name: String,
+            description: String
+        }
+    ],
+    location: String,
+    preferred_topics: [String],
     points: Number
 });
 
