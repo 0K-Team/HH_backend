@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-export const gardenSchema = new Schema({
+const gardenSchema = new Schema({
     plants: [
         {
             plant_type: {

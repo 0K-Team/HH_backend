@@ -1,6 +1,6 @@
 import { Schema, model, Types } from "mongoose";
 
-export const quizSchema = new Schema({
+const quizSchema = new Schema({
     title: {
         type: String,
         required: true

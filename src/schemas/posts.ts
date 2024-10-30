@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-export const postSchema = new Schema({
+const postSchema = new Schema({
     author: {
         type: String,
         required: true
