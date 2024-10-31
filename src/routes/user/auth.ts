@@ -15,8 +15,21 @@ router.get("/google/callback", passport.authenticate("google", { failureRedirect
         accountID: id
     }, process.env.JWT_SECRET as string);
     res.cookie("jwt", token);
-    res.redirect("/user/me");
+    res.redirect("/dash");
 });
+
+router.get("/google/callback/mobile", passport.authenticate("google", { failureRedirect: "/", session: false }), (req, res) => {
+    if (!req.user) return res.status(400), undefined;
+    // @ts-ignore
+    const { _id, email, id } = req.user;
+    const token = jwt.sign({
+        id: _id,
+        email,
+        accountID: id
+    }, process.env.JWT_SECRET as string);
+    res.send(token);
+})
+
 
 router.get("/facebook", passport.authenticate("facebook"));
 router.get("/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/", session: false }), (req, res) => {
@@ -29,7 +42,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", { failureRedi
         accountID: id
     }, process.env.JWT_SECRET as string);
     res.cookie("jwt", token);
-    res.redirect("/");
+    res.redirect("/dash");
 });
 
 export default router;
