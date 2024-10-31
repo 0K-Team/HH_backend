@@ -37,7 +37,7 @@ router.get("/:id", async (req, res) => {
     res.send(post);
 });
 
-router.post("/", passport.authenticate("jwt"), async (req, res) => {
+router.post("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.status(401), undefined;
     const {
@@ -54,7 +54,7 @@ router.post("/", passport.authenticate("jwt"), async (req, res) => {
     res.send(post);
 });
 
-router.put("/:id", passport.authenticate("jwt"), async (req, res) => {
+router.put("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.status(401), undefined;
 
@@ -74,7 +74,7 @@ router.put("/:id", passport.authenticate("jwt"), async (req, res) => {
     res.send(newPost);
 })
 
-router.post("/:id", passport.authenticate("jwt"), async (req, res) => {
+router.post("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.status(401), undefined;
 
