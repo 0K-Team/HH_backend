@@ -14,7 +14,7 @@ const accountSchema = new Schema({
     username: {
         type: String,
         required: true,
-        default: () => new Array(9).fill(0).map((_, i) => i < 5 ? 'user'[i] : Math.floor(Math.random() * 10)).join("")
+        default: () => "user" + new Array(4).fill(0).map((_) => Math.floor(Math.random() * 10)).join("")
     },
     fullName: {
         type: {
