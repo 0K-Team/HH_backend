@@ -9,14 +9,14 @@ const router = Router();
 router.get("/", async (req, res) => {
     const page = parseInt(req.query.page as string) || 1; 
     const limit = parseInt(req.query.limit as string) || 10;
-    if (page < 1) return res.status(400), undefined;
-    if (limit > 100) return res.status(400), undefined;
+    if (page < 1) return res.status(400).send(), undefined;
+    if (limit > 100) return res.status(400).send(), undefined;
 
     const start = (page - 1) * limit;
     const total = await PostSchema.countDocuments();
     const pages = Math.ceil(total / limit);
 
-    if (page > pages) return res.status(400), undefined;
+    if (page > pages) return res.status(400).send(), undefined;
 
     const posts = await PostSchema.find().skip(start).limit(limit);
 
@@ -39,7 +39,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
     // @ts-ignore
-    if (!req.user || !req.user.id) return res.status(401), undefined;
+    if (!req.user || !req.user.id) return res.status(401).send(), undefined;
     const {
         content,
         images,
@@ -48,7 +48,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
 
     // @ts-ignore
     const validated = PostValidator.validate({author: req.user.id, content, images, tags})
-    if (validated.error) return res.status(400), undefined;
+    if (validated.error) return res.status(400).send(), undefined;
     
     const post = await PostSchema.create(validated.value);
     res.send(post);
@@ -56,19 +56,19 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
 
 router.put("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
     // @ts-ignore
-    if (!req.user || !req.user.id) return res.status(401), undefined;
+    if (!req.user || !req.user.id) return res.status(401).send(), undefined;
 
     const { content, tags, images } = req.body;
     const { id } = req.params;
 
     const post = await PostSchema.findById(id);
 
-    if (!post) return res.status(404), undefined;
+    if (!post) return res.status(404).send(), undefined;
     // @ts-ignore
-    if (post && post.author != req.user.id) return res.status(403), undefined;
+    if (post && post.author != req.user.id) return res.status(403).send(), undefined;
 
     const validated = PostValidator.validate({...post, content, tags, images});
-    if (validated.error) return res.status(400), undefined;
+    if (validated.error) return res.status(400).send(), undefined;
     
     const newPost = await PostSchema.findByIdAndUpdate(id, validated.value);
     res.send(newPost);
@@ -76,7 +76,7 @@ router.put("/:id", passport.authenticate("jwt", { session: false }), async (req,
 
 router.post("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
     // @ts-ignore
-    if (!req.user || !req.user.id) return res.status(401), undefined;
+    if (!req.user || !req.user.id) return res.status(401).send(), undefined;
 
     const { id } = req.params;
     
@@ -85,9 +85,9 @@ router.post("/:id", passport.authenticate("jwt", { session: false }), async (req
             // @ts-ignore
             likes: req.user.id
         }
-    })
+    }, { new: true })
 
-    res.send(post?.likes.length);
+    res.status(200).send({ likes: post?.likes.length });
 })
 
 export default router;

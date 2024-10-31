@@ -1,11 +1,13 @@
 import Joi from "joi";
 
 export const PostValidator = Joi.object({
+    _id: Joi
+        .object(),
     author: Joi
         .string()
         .length(15)
         .required()
-        .pattern(new RegExp('^[0-9]{15}$')),
+        .pattern(/^[0-9]{15}$/),
     content: Joi
         .string()
         .min(1)
@@ -18,13 +20,89 @@ export const PostValidator = Joi.object({
     likes: Joi
         .array()
         .optional()
-        .default([]),
+        .items(Joi.string().length(15).pattern(/^[0-9]{15}$/)),
     tags: Joi
         .array()
-        .optional()
-        .default([]),
+        .items(Joi.string().min(1).max(64)),
     images: Joi
         .array()
-        .optional()
-        .default([])
-});
+        .items(Joi.string())
+}).options({ stripUnknown: true });
+
+export const UserValidator = Joi.object().keys({
+    _id: Joi
+        .object(),
+    id: Joi
+        .string()
+        .length(15)
+        .required()
+        .pattern(/^[0-9]{15}$/),
+    email: Joi
+        .string()
+        .pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
+    username: Joi
+        .string()
+        .required()
+        .min(2)
+        .max(32),
+    fullName: Joi
+        .object().keys({
+            _id: Joi
+                .object(),
+            givenName: Joi
+                .string()
+                .min(1)
+                .max(50),
+            familyName: Joi
+                .string()
+                .min(1)
+                .max(50)
+        }),
+    avatarHash: Joi
+        .string(),
+    provider: Joi
+        .string()
+        .valid("google", "facebook"),
+    googleID: Joi
+        .string(),
+    facebookID: Joi
+        .string(),
+    title: Joi
+        .string(),
+    notifications: Joi
+        .array()
+        .items(Joi.object().keys({
+            _id: Joi
+                .object(),
+            title: Joi.string().min(1).max(128),
+            date: Joi.string().isoDate()
+        })),
+    friends: Joi
+        .array()
+        .items(Joi.string().length(15).pattern(/^[0-9]{15}$/)),
+    bio: Joi
+        .string()
+        .min(1)
+        .max(230),
+    achievements: Joi
+        .array()
+        .items(Joi.object().keys({
+            _id: Joi
+                .object(),
+            name: Joi.string().min(1).max(128),
+            date_awarded: Joi.string().isoDate()
+        })),
+    skills: Joi
+        .array()
+        .items(Joi.string()),
+    badges: Joi
+        .array()
+        .items(Joi.string()),
+    location: Joi
+        .string(),
+    preferredTopics: Joi
+        .array()
+        .items(Joi.string().min(1).max(64)),
+    points: Joi
+        .number()
+}).options({ stripUnknown: true });
