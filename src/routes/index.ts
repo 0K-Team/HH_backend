@@ -10,7 +10,7 @@ router.use("/user", userRouter);
 
 router.use("/avatar", avatarRouter);
 
-router.use("/blog", blogRouter);
+router.use("/blogs", blogRouter);
 
 router.use("/posts", postsRouter);
 
