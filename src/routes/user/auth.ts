@@ -18,7 +18,7 @@ router.get("/google/callback", passport.authenticate("google", { failureRedirect
     res.redirect("/dash");
 });
 
-router.get("/google/callback/mobile", passport.authenticate("google", { failureRedirect: "/", session: false }), (req, res) => {
+router.get("/google/callbackmobile", passport.authenticate("google", { failureRedirect: "/", session: false }), (req, res) => {
     if (!req.user) return res.status(400), undefined;
     // @ts-ignore
     const { _id, email, id } = req.user;
