@@ -18,19 +18,6 @@ router.get("/google/callback", passport.authenticate("google", { failureRedirect
     res.redirect("/dash");
 });
 
-router.get("/google/callbackmobile", passport.authenticate("google", { failureRedirect: "/", session: false }), (req, res) => {
-    if (!req.user) return res.status(400), undefined;
-    // @ts-ignore
-    const { _id, email, id } = req.user;
-    const token = jwt.sign({
-        id: _id,
-        email,
-        accountID: id
-    }, process.env.JWT_SECRET as string);
-    res.send(token);
-})
-
-
 router.get("/facebook", passport.authenticate("facebook"));
 router.get("/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/", session: false }), (req, res) => {
     if (!req.user) return res.status(400), undefined;
