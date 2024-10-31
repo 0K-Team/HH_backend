@@ -14,6 +14,7 @@ const accountSchema = new Schema({
     username: {
         type: String,
         required: true,
+        default: () => new Array(9).fill(0).map((_, i) => i < 5 ? 'user'[i] : Math.floor(Math.random() * 10)).join("")
     },
     fullName: {
         type: {
@@ -61,7 +62,7 @@ const accountSchema = new Schema({
     skills: [String],
     badges: [String],
     location: String,
-    preferred_topics: [String],
+    preferredTopics: [String],
     points: Number
 });
 
