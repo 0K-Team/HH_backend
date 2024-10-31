@@ -24,7 +24,7 @@ router.get("/:user", async (req, res) => {
     }
 })
 
-router.patch("/me/changeUsername/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.patch("/me/username/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
     const newUsername: String = req.params.newName;
     try {
         const result = AccountData.findOneAndUpdate({
@@ -40,7 +40,7 @@ router.patch("/me/changeUsername/:newName", passport.authenticate("jwt", { sessi
     }
 })
 
-router.patch("/me/changeFirstName/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.patch("/me/firstName/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
     const newFirstName: String = req.params.newName;
     try {
         const result = AccountData.findOneAndUpdate({
@@ -56,7 +56,7 @@ router.patch("/me/changeFirstName/:newName", passport.authenticate("jwt", { sess
     }
 })
 
-router.patch("/me/changeLastName/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.patch("/me/lastName/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
     const newLastName: String = req.params.newName;
     try {
         const result = AccountData.findOneAndUpdate({
