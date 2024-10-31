@@ -40,4 +40,36 @@ router.patch("/me/changeUsername/:newName", passport.authenticate("jwt", { sessi
     }
 })
 
+router.patch("/me/changeFirstName/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
+    const newFirstName: String = req.params.newName;
+    try {
+        const result = AccountData.findOneAndUpdate({
+            //@ts-ignore
+            id: req.user.id,
+        }, {
+            $set: { "fullName.givenName": newFirstName },
+        }, { new: true }).exec();
+        //@ts-ignore
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+})
+
+router.patch("/me/changeLastName/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
+    const newLastName: String = req.params.newName;
+    try {
+        const result = AccountData.findOneAndUpdate({
+            //@ts-ignore
+            id: req.user.id,
+        }, {
+            $set: { "fullName.familyName": newLastName },
+        }, { new: true }).exec();
+        //@ts-ignore
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+})
+
 export default router;
