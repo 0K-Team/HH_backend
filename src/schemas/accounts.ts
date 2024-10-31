@@ -7,10 +7,7 @@ const accountSchema = new Schema({
         unique: true,
         default: () => new Array(15).fill(0).map(_ => Math.floor(Math.random() * 10)).join("")
     },
-    email: {
-        type: String,
-        required: false,
-    },
+    email: String,
     username: {
         type: String,
         required: true,
@@ -23,10 +20,7 @@ const accountSchema = new Schema({
         },
         required: true
     },
-    avatarHash: {
-        type: String,
-        required: true
-    },
+    avatarHash: String,
     provider: {
         type: String,
         enum: ["google", "facebook"],
@@ -42,9 +36,7 @@ const accountSchema = new Schema({
         unique: true,
         sparse: true
     },
-    title: {
-        name: String,
-    },
+    title: String,
     notifications: [
         {
             title: String,

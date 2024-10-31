@@ -6,7 +6,7 @@ const router = Router();
 
 router.get("/google", passport.authenticate("google"));
 router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/", session: false }), (req, res) => {
-    if (!req.user) return res.status(401), undefined;
+    if (!req.user) return res.status(401).send(), undefined;
     // @ts-ignore
     const { _id, email, id } = req.user;
     const token = jwt.sign({
@@ -19,7 +19,7 @@ router.get("/google/callback", passport.authenticate("google", { failureRedirect
 });
 
 router.get("/googleToken", passport.authenticate("googleToken", { failureRedirect: "/", session: false }), (req, res) => {
-    if (!req.user) return res.status(401), undefined;
+    if (!req.user) return res.status(401).send(), undefined;
     // @ts-ignore
     const { _id, email, id } = req.user;
     const token = jwt.sign({
@@ -33,7 +33,7 @@ router.get("/googleToken", passport.authenticate("googleToken", { failureRedirec
 
 router.get("/facebook", passport.authenticate("facebook"));
 router.get("/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/", session: false }), (req, res) => {
-    if (!req.user) return res.status(400), undefined;
+    if (!req.user) return res.status(401).send(), undefined;
     // @ts-ignore
     const { _id, email, id } = req.user;
     const token = jwt.sign({

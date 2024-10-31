@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import AccountData from "../../schemas/accounts"
-import { Aggregate } from "mongoose";
+import { UserValidator } from "../../validators";
 
 const router = Router();
 
@@ -10,7 +10,7 @@ router.get("/me", passport.authenticate("jwt", { session: false }), (req, res) =
 })
 
 router.get("/:user", async (req, res) => {
-    const reqUser: String = await req.params.user;
+    const reqUser: String = req.params.user;
     const userAggregate = AccountData.aggregate([
         { $match: { username: reqUser } },
         { $project: { _id: 0, id: 1, username: 1, avatarHash: 1, title: 1, bio: 1, achievements: 1, skills: 1, badges: 1, location: 1, preferredTopics: 1 } }
@@ -24,10 +24,10 @@ router.get("/:user", async (req, res) => {
     }
 })
 
-router.patch("/me/username/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.patch("/me/username/:newName", passport.authenticate("jwt", { session: false }), async (req, res) => {
     const newUsername: String = req.params.newName;
     try {
-        const result = AccountData.findOneAndUpdate({
+        const result = await AccountData.findOneAndUpdate({
             //@ts-ignore
             id: req.user.id,
         }, {
@@ -40,10 +40,10 @@ router.patch("/me/username/:newName", passport.authenticate("jwt", { session: fa
     }
 })
 
-router.patch("/me/firstName/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.patch("/me/firstName/:newName", passport.authenticate("jwt", { session: false }), async (req, res) => {
     const newFirstName: String = req.params.newName;
     try {
-        const result = AccountData.findOneAndUpdate({
+        const result = await AccountData.findOneAndUpdate({
             //@ts-ignore
             id: req.user.id,
         }, {
@@ -56,10 +56,10 @@ router.patch("/me/firstName/:newName", passport.authenticate("jwt", { session: f
     }
 })
 
-router.patch("/me/lastName/:newName", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.patch("/me/lastName/:newName", passport.authenticate("jwt", { session: false }), async (req, res) => {
     const newLastName: String = req.params.newName;
     try {
-        const result = AccountData.findOneAndUpdate({
+        const result = await AccountData.findOneAndUpdate({
             //@ts-ignore
             id: req.user.id,
         }, {
@@ -70,6 +70,26 @@ router.patch("/me/lastName/:newName", passport.authenticate("jwt", { session: fa
     } catch (err) {
         res.status(500).send(err);
     }
+})
+
+router.patch("/me/bio", passport.authenticate("jwt", { session: false }), async (req, res) => {
+    const { bio } = req.body;
+
+    const user = await AccountData.findOne({
+        // @ts-ignore
+        id: req.user.id
+    });
+
+    // @ts-ignore
+    const validated = UserValidator.validate({ ...user?.toObject(), bio });
+    if (validated.error) return res.status(400).send(), console.log(validated.error.details), undefined;
+
+    const newUser = await AccountData.findOneAndUpdate({
+        // @ts-ignore
+        id: req.user.id
+    }, { bio }, { new: true });
+
+    res.send(newUser);
 })
 
 export default router;
