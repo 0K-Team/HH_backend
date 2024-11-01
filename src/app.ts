@@ -33,6 +33,12 @@ app.use(passport.initialize());
 
 app.use("/v1/", routes);
 
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
+
 const options = {
   definition: {
     openapi: "3.1.0",
