@@ -29,6 +29,16 @@ router.get("/", async (req, res) => {
     })
 });
 
+router.get("/user/:id", async (req, res) => {
+    const { id } = req.params;
+    
+    const posts = await PostSchema.find({
+        author: id
+    });
+
+    res.send(posts);
+})
+
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
     const post = await PostSchema.findById(id);
@@ -74,11 +84,24 @@ router.put("/:id", passport.authenticate("jwt", { session: false }), async (req,
     res.send(newPost);
 })
 
-router.post("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post("/like/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
     const { id } = req.params;
     
     const post = await PostSchema.findByIdAndUpdate(id, {
         $addToSet: {
+            // @ts-ignore
+            likes: req.user.id
+        }
+    }, { new: true })
+
+    res.status(200).send({ likes: post?.likes.length });
+})
+
+router.delete("/like/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
+    const { id } = req.params;
+    
+    const post = await PostSchema.findByIdAndUpdate(id, {
+        $pull: {
             // @ts-ignore
             likes: req.user.id
         }
