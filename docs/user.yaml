@@ -298,3 +298,28 @@ components:
         description: Bad request
       500:
         description: Internal server error
+
+/random/test/shit:
+  post:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
+    summary: Add a preferred topic for current user
+    parameters:
+      - name: topic
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
