@@ -43,6 +43,9 @@ const options = {
     },
     servers: [
       {
+        url: "https://eco-docs.q1000q.me/v1",
+      },
+      {
         url: "https://ecohero.q1000q.me/api/v1",
       },
     ],
