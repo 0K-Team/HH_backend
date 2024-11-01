@@ -9,19 +9,16 @@ router.get("/me", (req, res) => {
     res.send(req.user);
 })
 
-router.get("/:user", async (req, res) => {
-    const reqUser: String = req.params.user;
-    const userAggregate = AccountData.aggregate([
-        { $match: { username: reqUser } },
-        { $project: { _id: 0, id: 1, username: 1, avatarHash: 1, title: 1, bio: 1, achievements: 1, skills: 1, badges: 1, location: 1, preferredTopics: 1 } }
-    ]);
+router.get("/:id", async (req, res) => {
+    const { id } = req.params;
+    
+    const user = await AccountData.findOne({
+        id
+    });
 
-    try {
-        const result = await userAggregate.exec();
-        res.send(result);
-    } catch (error) {
-        res.status(500).send(error);
-    }
+    if (!user) return res.sendStatus(404), undefined;
+
+    res.send(user);
 })
 
 router.patch("/me/username/:newName", async (req, res) => {
