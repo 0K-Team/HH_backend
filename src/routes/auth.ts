@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
-import AccountSchema from "../../schemas/accounts";
+import AccountSchema from "../schemas/accounts";
 
 const router = Router();
 
