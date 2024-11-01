@@ -9,8 +9,6 @@ import "./auth/google";
 import "./auth/facebook";
 import "./auth/jwt";
 import cookie from "cookie-parser";
-import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
 
 dotenv.config();
 
@@ -28,30 +26,6 @@ app.use(cookie());
 app.use(passport.initialize());
 
 app.use("/v1/", routes);
-
-const options = {
-  definition: {
-    openapi: "3.1.0",
-    info: {
-      title: "EcoHero Express API with Swagger",
-      version: "1.0.0",
-      description: "EcoHero API documented with Swagger",
-    },
-    servers: [
-      {
-        url: "https://ecohero.q1000q.me/api/v1",
-      },
-    ],
-  },
-  apis: [__dirname + "/docs/*.yaml"], // Path to your YAML file
-};
-
-const specs = swaggerJsdoc(options);
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(specs)
-);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
