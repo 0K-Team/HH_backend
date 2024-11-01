@@ -39,7 +39,7 @@ const options = {
   
   const specs = swaggerJsdoc(options);
   router.use(
-    "/api-docs",
+    "/api/api-docs",
     swaggerUi.serve,
     swaggerUi.setup(specs)
   );
