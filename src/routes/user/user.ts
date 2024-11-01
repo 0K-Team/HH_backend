@@ -103,4 +103,32 @@ router.patch("/me/location", async (req, res) => {
     res.send(newUser);
 })
 
+router.post("/me/preferredTopics/:topic", async (req, res) => {
+    const topic: String = req.params.topic;
+    //@ts-ignore
+    const id = req.user.id;
+
+    const response = await AccountData.findOneAndUpdate({
+        id,
+    }, {
+        $push: { preferredTopics: topic },
+    }, { new: true });
+
+    res.send(response);
+})
+
+router.delete("/me/preferredTopics/:topic", async (req, res) => {
+    const topic: String = req.params.topic;
+    //@ts-ignore
+    const id = req.user.id;
+
+    const response = await AccountData.findOneAndUpdate({
+        id,
+    }, {
+        $pull: { preferredTopics: topic },
+    }, { new: true });
+
+    res.send(response);
+})
+
 export default router;
