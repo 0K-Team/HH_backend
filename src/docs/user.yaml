@@ -1,3 +1,300 @@
 tags:
   name: User
   description: User management and retrieval
+
+components:
+  schemas:
+    Accounts:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+        fullName:
+          type: object
+          properties:
+            givenName:
+              type: string
+            familyName:
+              type: string
+        avatarHash:
+          type: string
+        provider:
+          type: string
+          enum:
+            - google
+            - facebook
+        googleID:
+          type: string
+        facebookID:
+          type: string
+        title:
+          type: string
+        notifications:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              date:
+                type: string
+                format: date-time
+        friends:
+          type: array
+          items:
+            type: string
+        bio:
+          type: string
+        achievements:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              date_awarded:
+                type: string
+                format: date-time
+        skills:
+          type: array
+          items:
+            type: string
+        badges:
+          type: array
+          items:
+            type: string
+        location:
+          type: string
+        preferredTopics:
+          type: array
+          items:
+            type: string
+        points:
+          type: number
+        admin:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+          
+/user/me:
+  get:
+    security:
+        - bearerAuth: []
+    tags:
+      - User
+    summary: Get current user
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      401:
+        description: Unauthorized
+
+/user/{user}:
+  get:
+    tags:
+      - User
+    summary: Get user by username
+    parameters:
+      - name: user
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      404:
+        description: User not found
+
+/user/me/username/{newName}:
+  patch:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
+    summary: Update current user's username
+    parameters:
+      - name: newName
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
+
+/user/me/firstName/{newName}:
+  patch:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
+    summary: Update current user's first name
+    parameters:
+      - name: newName
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
+
+/user/me/lastName/{newName}:
+  patch:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
+    summary: Update current user's last name
+    parameters:
+      - name: newName
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
+
+/user/me/bio:
+  patch:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
+    summary: Update current user's bio
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              bio:
+                type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
+
+/user/me/location:
+  patch:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
+    summary: Update current user's location
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              location:
+                type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
+
+/user/me/preferredTopics/{topic}:
+  post:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
+    summary: Add a preferred topic for current user
+    parameters:
+      - name: topic
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
+
+  delete:
+    security:
+        - bearerAuth: []
+    tags:
+      - User
+    summary: Remove a preferred topic for current user
+    parameters:
+      - name: topic
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error

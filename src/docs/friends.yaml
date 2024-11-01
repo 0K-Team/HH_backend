@@ -1,0 +1,118 @@
+tags:
+  name: Friends
+  description: Friends management and retrieval
+
+components:
+  schemas:
+    FriendRequest:
+      type: object
+      properties:
+        sender:
+          type: string
+        target:
+          type: string
+        createdAt:
+          type: string
+/me:
+  get:
+    summary: Get friends of the current user
+    tags: [Friends]
+    responses:
+      '200':
+        description: A list of friends
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+/requests:
+  get:
+    summary: Get incoming friend requests
+    tags: [Friends]
+    responses:
+      '200':
+        description: A list of incoming friend requests
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+/requests/me:
+  get:
+    summary: Get outgoing friend requests
+    tags: [Friends]
+    responses:
+      '200':
+        description: A list of outgoing friend requests
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+  post:
+    summary: Send a new friend request
+    tags: [Friends]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the user to send a friend request to
+    responses:
+      '200':
+        description: The created friend request
+        content:
+          application/json:
+            schema:
+              type: object
+/requests/{id}:
+  delete:
+    summary: Reject an incoming friend request
+    tags: [Friends]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the user whose request to reject
+    responses:
+      '200':
+        description: Request rejected successfully
+      '404':
+        description: Request not found
+  post:
+    summary: Accept an incoming friend request
+    tags: [Friends]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the user whose request to accept
+    responses:
+      '200':
+        description: Request accepted successfully
+      '404':
+        description: Request not found
+/requests/me/{id}:
+  delete:
+    summary: Retract an outgoing friend request
+    tags: [Friends]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the user whose request to retract
+    responses:
+      '200':
+        description: Request retracted successfully
+      '404':
+        description: Request not found
