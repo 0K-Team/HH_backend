@@ -45,6 +45,12 @@ const options = {
       {
         url: "https://ecohero.q1000q.me/api/v1",
       },
+      {
+        url: "https://eco-docs.q1000q.me/api/v1",
+      },
+      {
+        url: "https://ecoheroapi.q1000q.me/api/v1",
+      },
     ],
   },
   apis: ["./docs/*.yaml"], // Path to your YAML file
