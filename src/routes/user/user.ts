@@ -92,36 +92,4 @@ router.patch("/me/bio", async (req, res) => {
     res.send(newUser);
 })
 
-router.post("/me/friends/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
-    const friendId = await req.params.id;
-    //@ts-ignore
-    const id = req.user.id;
-    try {
-        const result = await AccountData.findOneAndUpdate({
-            id: id,
-        }, {
-            $push: {"friends": friendId}
-        }, { new: true }).exec();
-        res.status(200).send(result);
-    } catch (error) {
-        res.status(500).send(error);
-    }
-})
-
-router.delete("/me/friends/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
-    const friendId = await req.params.id;
-    //@ts-ignore
-    const id = req.user.id;
-    try {
-        const result = await AccountData.findOneAndUpdate({
-            id: id,
-        }, {
-            $pull: {"friends": friendId}
-        }, { new: true }).exec();
-        res.status(200).send(result);
-    } catch (error) {
-        res.status(500).send(error);
-    }
-})
-
 export default router;
