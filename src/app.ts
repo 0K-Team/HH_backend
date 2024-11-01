@@ -11,6 +11,7 @@ import "./auth/jwt";
 import cookie from "cookie-parser";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 
 dotenv.config();
 
@@ -18,6 +19,9 @@ mongoose.connect(process.env.MONGODB_URL as string)
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
+
+app.use(cors());
+
 
 app.set('trust proxy', 1);
 
