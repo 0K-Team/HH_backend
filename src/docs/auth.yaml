@@ -1,0 +1,71 @@
+tags:
+  name: Auth
+  description: Auth management and retrieval
+
+/auth/google:
+  get:
+    summary: Authenticate with Google
+    tags: [Auth]
+    responses:
+      302:
+        description: Redirect to Google for authentication
+
+/auth/google/callback:
+  get:
+    summary: Google authentication callback
+    tags: [Auth]
+    responses:
+      302:
+        description: Redirect to dashboard on success
+      401:
+        description: Unauthorized
+
+/auth/googleToken:
+  get:
+    summary: Authenticate with Google token
+    tags: [Auth]
+    responses:
+      200:
+        description: Returns JWT token
+      401:
+        description: Unauthorized
+
+/auth/facebook:
+  get:
+    summary: Authenticate with Facebook
+    tags: [Auth]
+    responses:
+      302:
+        description: Redirect to Facebook for authentication
+
+/auth/facebook/callback:
+  get:
+    summary: Facebook authentication callback
+    tags: [Auth]
+    responses:
+      302:
+        description: Redirect to dashboard on success
+      401:
+        description: Unauthorized
+
+/auth/facebook/email:
+  post:
+    summary: Update email for Facebook authenticated user
+    tags: [Auth]
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: User email
+    responses:
+      200:
+        description: Email updated successfully
+      401:
+        description: Unauthorized

@@ -1,0 +1,7 @@
+openapi: 3.1.0
+info:
+  title: EcoHero Express API with Swagger
+  version: 1.0.0
+  description: EcoHero API documented with Swagger
+servers:
+  - url: https://ecohero.q1000q.me/api/v1

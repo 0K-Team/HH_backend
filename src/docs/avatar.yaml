@@ -1,0 +1,51 @@
+tags:
+  name: Avatars
+  description: Avatar management and retrieval
+
+/avatar/{filename}:
+  get:
+    summary: Gets stream of a filename
+    tags: [Avatars]
+    parameters:
+      - in: path
+        name: filename
+        required: true
+        schema:
+          type: string
+        description: The name of the file to retrieve
+    responses:
+      200:
+        description: A stream of a file
+        content:
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
+      500:
+        description: Error
+
+/avatar:
+ post:
+   summary: Uploads an image from buffer
+   tags: [Avatars]
+   requestBody:
+     required: true
+     content:
+       application/octet-stream:
+         schema:
+           type: string
+           format: binary
+   responses:
+     200:
+       description: File uploaded successfully
+       content:
+         application/json:
+           schema:
+             type: object
+             properties:
+               message:
+                 type: string
+               fileUrl:
+                 type: string
+     500:
+       description: Error

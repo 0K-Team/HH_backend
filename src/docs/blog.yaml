@@ -1,0 +1,61 @@
+tags:
+  name: Blogs
+  description: Blog management and retrieval
+
+components:
+  schemas:
+    Blog:
+      type: object
+      required:
+        - id
+        - title
+        - content
+      properties:
+        id:
+          type: string
+          description: The auto-generated id of the blog
+        title:
+          type: string
+          description: The title of the blog
+        content:
+          type: string
+          description: The content of the blog
+      example:
+        id: d5fE_asz
+        title: My First Blog
+        content: This is the content of my first blog
+
+/blogs:
+  get:
+    summary: Retrieve a list of blogs
+    tags: [Blogs]
+    responses:
+      200:
+        description: A list of blogs
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Blog'
+
+/blogs/{id}:
+  get:
+    summary: Retrieve a single blog by ID
+    tags: [Blogs]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The blog ID
+    responses:
+      200:
+        description: A single blog
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Blog'
+      404:
+        description: Blog not found

@@ -1,4 +1,3 @@
-// src/routes/getFile.ts
 import express, { Request, Response } from 'express';
 import getAvatar from '../avatars/getAvatar';
 import uploadAvatar from '../avatars/uploadAvatar';
