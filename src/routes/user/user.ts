@@ -92,4 +92,15 @@ router.patch("/me/bio", async (req, res) => {
     res.send(newUser);
 })
 
+router.patch("/me/location", async (req, res) => {
+    const { location } = req.body;
+
+    const newUser = await AccountData.findOneAndUpdate({
+        // @ts-ignore
+        id: req.user.id
+    }, { location }, { new: true });
+
+    res.send(newUser);
+})
+
 export default router;
