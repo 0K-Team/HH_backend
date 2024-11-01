@@ -1,4 +1,4 @@
-import uploadAvatar from "../avatars/uploadAvatar"
+import { uploadAvatar } from "../assets/upload"
 import * as fs from 'fs';
 
 fs.readFile('./src/tests/testAvatar.jpg', (err, data) => {
@@ -11,5 +11,5 @@ fs.readFile('./src/tests/testAvatar.jpg', (err, data) => {
 
     console.log("Buffer: ", buffer);
 
-    uploadAvatar(buffer, "testAvatar.jpg");
+    uploadAvatar(buffer, "123456789012345", "testAvatar.jpg");
 });

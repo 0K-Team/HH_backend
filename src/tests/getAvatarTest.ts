@@ -1,10 +1,10 @@
-import getAvatar from "../avatars/getAvatar"
+import { downloadAvatar } from "../assets/download"
 import * as fs from "fs"
 
 const filename = "testAvatar.jpg";
 const writeStream = fs.createWriteStream(`./src/tests/output/${filename}`);
 
-getAvatar(filename, writeStream);
+downloadAvatar("123456789012345", filename, writeStream);
 
 writeStream.on('finish', () => {
     console.log('File has been written successfully.');

@@ -1,7 +1,6 @@
 import { Router } from "express";
 import PostSchema from "../schemas/posts";
 import passport from "passport";
-import joi from "joi";
 import { PostValidator } from "../validators";
 
 const router = Router();

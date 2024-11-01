@@ -4,7 +4,7 @@ import { Strategy as CustomStrategy } from "passport-custom";
 import { OAuth2Client } from "google-auth-library";
 import AccountData from "../schemas/accounts";
 import md5 from "md5";
-import uploadAvatar from "../avatars/uploadAvatar";
+import { uploadAvatar } from "../assets/upload";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID as string);
 
@@ -50,7 +50,7 @@ passport.use(new GoogleStrategy({
         try {
             const image = await fetch(profile._json.picture as string);
             const buffer = Buffer.from(await image.arrayBuffer());
-            uploadAvatar(buffer, hash);
+            uploadAvatar(buffer, user.id, hash);
             return done(null, await AccountData.findOneAndUpdate({
                 email
             }, {
@@ -103,7 +103,7 @@ passport.use("googleToken", new CustomStrategy(
                 try {
                     const image = await fetch(payload.picture as string);
                     const buffer = Buffer.from(await image.arrayBuffer());
-                    uploadAvatar(buffer, hash);
+                    uploadAvatar(buffer, user.id, hash);
                     return done(null, await AccountData.findOneAndUpdate({
                         email
                     }, {

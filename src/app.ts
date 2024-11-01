@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import dotenv from "dotenv";
 import routes from "./routes";
 import mongoose from "mongoose";
@@ -21,7 +21,6 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-
 
 app.set('trust proxy', 1);
 
