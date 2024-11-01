@@ -43,7 +43,7 @@ const options = {
       },
     ],
   },
-  apis: [__dirname + "/docs/*.yaml"], // Path to your YAML file
+  apis: [process.cwd() + "/docs/*.yaml"], // Path to your YAML file
 };
 
 const specs = swaggerJsdoc(options);
