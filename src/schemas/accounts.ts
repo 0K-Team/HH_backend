@@ -55,7 +55,12 @@ const accountSchema = new Schema({
     badges: [String],
     location: String,
     preferredTopics: [String],
-    points: Number
+    points: Number,
+    admin: Boolean,
+    createdAt: {
+        type: String,
+        default: () => new Date().toISOString()
+    }
 });
 
 export default model("account", accountSchema);

@@ -5,7 +5,7 @@ import { UserValidator } from "../../validators";
 
 const router = Router();
 
-router.get("/me", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get("/me", (req, res) => {
     res.send(req.user);
 })
 
@@ -24,7 +24,7 @@ router.get("/:user", async (req, res) => {
     }
 })
 
-router.patch("/me/username/:newName", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.patch("/me/username/:newName", async (req, res) => {
     const newUsername: String = req.params.newName;
     try {
         const result = await AccountData.findOneAndUpdate({
@@ -40,7 +40,7 @@ router.patch("/me/username/:newName", passport.authenticate("jwt", { session: fa
     }
 })
 
-router.patch("/me/firstName/:newName", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.patch("/me/firstName/:newName", async (req, res) => {
     const newFirstName: String = req.params.newName;
     try {
         const result = await AccountData.findOneAndUpdate({
@@ -56,7 +56,7 @@ router.patch("/me/firstName/:newName", passport.authenticate("jwt", { session: f
     }
 })
 
-router.patch("/me/lastName/:newName", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.patch("/me/lastName/:newName", async (req, res) => {
     const newLastName: String = req.params.newName;
     try {
         const result = await AccountData.findOneAndUpdate({
@@ -72,7 +72,7 @@ router.patch("/me/lastName/:newName", passport.authenticate("jwt", { session: fa
     }
 })
 
-router.patch("/me/bio", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.patch("/me/bio", async (req, res) => {
     const { bio } = req.body;
 
     const user = await AccountData.findOne({
@@ -82,7 +82,7 @@ router.patch("/me/bio", passport.authenticate("jwt", { session: false }), async 
 
     // @ts-ignore
     const validated = UserValidator.validate({ ...user?.toObject(), bio });
-    if (validated.error) return res.status(400).send(), console.log(validated.error.details), undefined;
+    if (validated.error) return res.sendStatus(400), console.log(validated.error.details), undefined;
 
     const newUser = await AccountData.findOneAndUpdate({
         // @ts-ignore

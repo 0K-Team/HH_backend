@@ -1,21 +1,18 @@
 import { Schema, model } from "mongoose";
 
-const postSchema = new Schema({
-    author: {
+const schema = new Schema({
+    sender: {
         type: String,
         required: true
     },
-    content: {
+    target: {
         type: String,
         required: true
     },
     createdAt: {
         type: String,
         default: () => new Date().toISOString()
-    },
-    likes: [String],
-    tags: [String],
-    images: [String]
-});
+    }
+})
 
-export default model("post", postSchema);
+export default model("friendRequest", schema);
