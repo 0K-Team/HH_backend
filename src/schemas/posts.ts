@@ -11,6 +11,7 @@ const postSchema = new Schema({
     },
     createdAt: {
         type: String,
+        required: true,
         default: () => new Date().toISOString()
     },
     likes: [String],
