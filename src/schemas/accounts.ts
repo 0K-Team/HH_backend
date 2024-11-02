@@ -54,12 +54,17 @@ const accountSchema = new Schema({
     skills: [String],
     badges: [String],
     location: String,
+    country: String,
     preferredTopics: [String],
     points: Number,
     admin: Boolean,
     createdAt: {
         type: String,
         default: () => new Date().toISOString()
+    },
+    configured: {
+        type: Boolean,
+        default: false
     }
 });
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import passport from "passport";
 import AccountData from "../../schemas/accounts"
 import { UserValidator } from "../../validators";
+import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
 const router = Router();
 
@@ -100,6 +100,17 @@ router.patch("/me/location", async (req, res) => {
     res.send(newUser);
 })
 
+router.patch("/me/country", async (req, res) => {
+    const { country } = req.body;
+
+    const user = await AccountData.findOneAndUpdate({
+        // @ts-ignore
+        id: req.user.id
+    }, { country }, { new: true });
+
+    res.send(user);
+})
+
 router.post("/me/preferredTopics/:topic", async (req, res) => {
     const topic: String = req.params.topic;
     //@ts-ignore
@@ -126,6 +137,37 @@ router.delete("/me/preferredTopics/:topic", async (req, res) => {
     }, { new: true });
 
     res.send(response);
+})
+
+router.post("/me/configure", async (req, res) => {
+    // @ts-ignore
+    const id = req.user.id;
+    
+    const { username, firstName, lastName, bio, location, country } = req.body;
+    
+    const oldUser = await AccountData.findOne({
+        id
+    });
+
+    if (!oldUser || oldUser.configured) return res.sendStatus(400), undefined;
+
+    const user = await AccountData.findOneAndUpdate({
+        id
+    }, {
+        username,
+        $set: {
+            "fullName.givenName": firstName,
+            "fullName.familyName": lastName
+        },
+        bio,
+        location,
+        country,
+        configured: true
+    }, {
+        new: true
+    });
+
+    res.send(user);
 })
 
 export default router;

@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 
     if (page > pages) return res.sendStatus(400), undefined;
 
-    const posts = await PostSchema.find().skip(start).limit(limit);
+    const posts = await PostSchema.find().skip(start).limit(limit).sort({ createdAt: -1 });
 
     res.json({
         page,
@@ -33,7 +33,7 @@ router.get("/user/:id", async (req, res) => {
     
     const posts = await PostSchema.find({
         author: id
-    });
+    }).sort({ createdAt: -1 });
 
     res.send(posts);
 })
