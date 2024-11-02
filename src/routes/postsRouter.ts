@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 
     if (page > pages) return res.sendStatus(400), undefined;
 
-    const posts = await PostSchema.find().skip(start).limit(limit).sort({ createdAt: -1 });
+    const posts = await PostSchema.find().sort({ createdAt: -1 }).skip(start).limit(limit);
 
     res.json({
         page,
