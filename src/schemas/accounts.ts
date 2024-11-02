@@ -65,6 +65,10 @@ const accountSchema = new Schema({
     configured: {
         type: Boolean,
         default: false
+    },
+    mailSent: {
+        type: Boolean,
+        default: false
     }
 });
 

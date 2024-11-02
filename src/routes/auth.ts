@@ -2,33 +2,50 @@ import { Router } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import AccountSchema from "../schemas/accounts";
+import { sendAccountRegistration } from "../mailer";
 
 const router = Router();
 
 router.get("/google", passport.authenticate("google"));
-router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/", session: false }), (req, res) => {
+router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/", session: false }), async (req, res) => {
     if (!req.user) return res.sendStatus(401), undefined;
     // @ts-ignore
-    const { _id, email, id } = req.user;
+    const { _id, email, id, mailSent, username } = req.user;
     const token = jwt.sign({
         id: _id,
         email,
         accountID: id
     }, process.env.JWT_SECRET as string);
     res.cookie("jwt", token);
+    if (!mailSent) {
+        sendAccountRegistration(email, username);
+        // await AccountSchema.updateOne({
+        //     id
+        // }, {
+        //     mailSent: true
+        // })
+    }
     res.redirect("/dash");
 });
 
-router.get("/googleToken", passport.authenticate("googleToken", { failureRedirect: "/", session: false }), (req, res) => {
+router.get("/googleToken", passport.authenticate("googleToken", { failureRedirect: "/", session: false }), async (req, res) => {
     if (!req.user) return res.sendStatus(401), undefined;
     // @ts-ignore
-    const { _id, email, id } = req.user;
+    const { _id, email, id, mailSent, username } = req.user;
     const token = jwt.sign({
         id: _id,
         email,
         accountID: id
     }, process.env.JWT_SECRET as string);
     res.cookie("jwt", token);
+    if (! mailSent) {
+        sendAccountRegistration(email, username);
+        await AccountSchema.updateOne({
+            id
+        }, {
+            mailSent: true
+        })
+    }
     res.send(token);
 });
 

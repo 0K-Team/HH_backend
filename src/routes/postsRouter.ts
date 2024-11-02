@@ -63,6 +63,19 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
     res.send(post);
 });
 
+router.delete("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
+    const { id } = req.params;
+
+    const post = await PostSchema.findById(id);
+
+    if (!post) return res.sendStatus(404), undefined;
+    // @ts-ignore
+    if (post && post.author != req.user.id) return res.sendStatus(403), undefined;
+   
+    await PostSchema.findByIdAndDelete(id);
+    res.sendStatus(200);
+})
+
 router.put("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.sendStatus(401), undefined;
