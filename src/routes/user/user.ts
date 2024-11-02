@@ -21,14 +21,14 @@ router.get("/:id", async (req, res) => {
     res.send(user);
 })
 
-router.patch("/me/username/:newName", async (req, res) => {
-    const newUsername: String = req.params.newName;
+router.patch("/me/username", async (req, res) => {
+    const { username } = req.body;
     try {
         const result = await AccountData.findOneAndUpdate({
             //@ts-ignore
             id: req.user.id,
         }, {
-            username: newUsername,
+            username,
         }).exec();
         //@ts-ignore
         res.status(200).send(result);
@@ -37,14 +37,14 @@ router.patch("/me/username/:newName", async (req, res) => {
     }
 })
 
-router.patch("/me/firstName/:newName", async (req, res) => {
-    const newFirstName: String = req.params.newName;
+router.patch("/me/firstName", async (req, res) => {
+    const { firstName } = req.body;
     try {
         const result = await AccountData.findOneAndUpdate({
             //@ts-ignore
             id: req.user.id,
         }, {
-            $set: { "fullName.givenName": newFirstName },
+            $set: { "fullName.givenName": firstName },
         }, { new: true }).exec();
         //@ts-ignore
         res.status(200).send(result);
@@ -53,14 +53,14 @@ router.patch("/me/firstName/:newName", async (req, res) => {
     }
 })
 
-router.patch("/me/lastName/:newName", async (req, res) => {
-    const newLastName: String = req.params.newName;
+router.patch("/me/lastName", async (req, res) => {
+    const { lastName } = req.body;
     try {
         const result = await AccountData.findOneAndUpdate({
             //@ts-ignore
             id: req.user.id,
         }, {
-            $set: { "fullName.familyName": newLastName },
+            $set: { "fullName.familyName": lastName },
         }, { new: true }).exec();
         //@ts-ignore
         res.status(200).send(result);
