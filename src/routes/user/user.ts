@@ -1,7 +1,6 @@
 import { Router } from "express";
 import AccountData from "../../schemas/accounts"
 import { UserValidator } from "../../validators";
-import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
 const router = Router();
 
