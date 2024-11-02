@@ -1,0 +1,39 @@
+tags:
+  name: Admin
+  description: Admin router for general management, available only to administrators
+
+/admin/blog:
+  post:
+    summary: Creates a new blog post
+    tags: [Admin]
+    responses:
+      200:
+        description: The created blog post
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '../blog.yaml#/components/schemas/Blog'
+/admin/blog/{id}:
+  delete:
+    summary: Deletes a blog post
+    tags: [Admin]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the blog post
+    responses:
+      200:
+        description: The deleted blog post
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '../blog.yaml#/components/schemas/Blog'
+      404:
+        description: Blog not found

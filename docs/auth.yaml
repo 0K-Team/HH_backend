@@ -24,6 +24,16 @@ tags:
   get:
     summary: Authenticate with Google token
     tags: [Auth]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              idToken:
+                type: string
+                description: Google ID Token
     responses:
       200:
         description: Returns JWT token

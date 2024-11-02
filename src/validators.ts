@@ -1,13 +1,15 @@
 import Joi from "joi";
 
+export const UserIdValidator = Joi
+    .string()
+    .length(15)
+    .required()
+    .pattern(/^[0-9]{15}$/)
+
 export const PostValidator = Joi.object({
     _id: Joi
         .object(),
-    author: Joi
-        .string()
-        .length(15)
-        .required()
-        .pattern(/^[0-9]{15}$/),
+    author: UserIdValidator,
     content: Joi
         .string()
         .min(1)
@@ -29,14 +31,10 @@ export const PostValidator = Joi.object({
         .items(Joi.string())
 }).options({ stripUnknown: true });
 
-export const UserValidator = Joi.object().keys({
+export const UserValidator = Joi.object({
     _id: Joi
         .object(),
-    id: Joi
-        .string()
-        .length(15)
-        .required()
-        .pattern(/^[0-9]{15}$/),
+    id: UserIdValidator,
     email: Joi
         .string()
         .pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
@@ -79,7 +77,7 @@ export const UserValidator = Joi.object().keys({
         })),
     friends: Joi
         .array()
-        .items(Joi.string().length(15).pattern(/^[0-9]{15}$/)),
+        .items(UserIdValidator),
     bio: Joi
         .string()
         .min(1)
@@ -105,4 +103,20 @@ export const UserValidator = Joi.object().keys({
         .items(Joi.string().min(1).max(64)),
     points: Joi
         .number()
+}).options({ stripUnknown: true });
+
+export const BlogValidator = Joi.object({
+    image: Joi
+        .string(),
+    title: Joi
+        .string()
+        .min(1)
+        .max(64)
+        .required(),
+    author: UserIdValidator,
+    content: Joi
+        .string()
+        .min(1)
+        .max(1000)
+        .required()
 }).options({ stripUnknown: true });

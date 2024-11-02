@@ -98,13 +98,13 @@ components:
       401:
         description: Unauthorized
 
-/user/{user}:
+/user/{id}:
   get:
     tags:
       - User
-    summary: Get user by username
+    summary: Get user by id
     parameters:
-      - name: user
+      - name: id
         in: path
         required: true
         schema:
@@ -119,19 +119,22 @@ components:
       404:
         description: User not found
 
-/user/me/username/{newName}:
+/user/me/username:
   patch:
     security:
       - bearerAuth: []
     tags:
       - User
     summary: Update current user's username
-    parameters:
-      - name: newName
-        in: path
-        required: true
-        schema:
-          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
     responses:
       200:
         description: Successful response
@@ -144,19 +147,22 @@ components:
       500:
         description: Internal server error
 
-/user/me/firstName/{newName}:
+/user/me/firstName:
   patch:
     security:
       - bearerAuth: []
     tags:
       - User
     summary: Update current user's first name
-    parameters:
-      - name: newName
-        in: path
-        required: true
-        schema:
-          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
     responses:
       200:
         description: Successful response
@@ -169,19 +175,22 @@ components:
       500:
         description: Internal server error
 
-/user/me/lastName/{newName}:
+/user/me/lastName:
   patch:
     security:
       - bearerAuth: []
     tags:
       - User
     summary: Update current user's last name
-    parameters:
-      - name: newName
-        in: path
-        required: true
-        schema:
-          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              lastName:
+                type: string
     responses:
       200:
         description: Successful response
@@ -281,31 +290,6 @@ components:
     tags:
       - User
     summary: Remove a preferred topic for current user
-    parameters:
-      - name: topic
-        in: path
-        required: true
-        schema:
-          type: string
-    responses:
-      200:
-        description: Successful response
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Accounts'
-      400:
-        description: Bad request
-      500:
-        description: Internal server error
-
-/random/test/shit:
-  post:
-    security:
-      - bearerAuth: []
-    tags:
-      - User
-    summary: Add a preferred topic for current user
     parameters:
       - name: topic
         in: path
