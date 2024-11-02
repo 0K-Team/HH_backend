@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { downloadAvatar } from '../assets/download';
 import { uploadAvatar } from '../assets/upload';
+import md5 from 'md5';
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.get('/:userID/:avatarHash', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/:userID/:avatarHash', async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
     try {
         // Create a buffer from the incoming request
         const chunks: Buffer[] = [];
@@ -23,10 +24,13 @@ router.post('/:userID/:avatarHash', async (req: Request, res: Response) => {
 
         req.on('end', async () => {
             const buffer = Buffer.concat(chunks); // Concatenate all chunks into a single buffer
-            const { userID, avatarHash } = req.params;
+            // @ts-ignore
+            const { id } = req.user;
+
+            const hash = md5(id + Date.now());
 
             // Upload the file using the buffer
-            const fileUrl = await uploadAvatar(buffer, userID, avatarHash);
+            const fileUrl = await uploadAvatar(buffer, id, hash);
             res.status(200).json({ message: 'File uploaded successfully', fileUrl });
         });
     } catch (error) {

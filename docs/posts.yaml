@@ -163,3 +163,46 @@ components:
         description: Forbidden
       404:
         description: Post not found
+/posts/like/{id}:
+  post:
+    summary: Like a post
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: Post ID
+    responses:
+      200:
+        description: Amount of likes the post has after the change
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                likes:
+                  type: number
+                  description: Amount of likes the post has
+  delete:
+    summary: Remove a like from a post
+    tags: [Posts]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: Post ID
+    responses:
+      200:
+        description: Amount of likes the post has after the change
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                likes:
+                  type: number
+                  description: Amount of likes the post has

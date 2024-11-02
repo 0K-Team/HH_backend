@@ -116,3 +116,18 @@ components:
         description: Request retracted successfully
       '404':
         description: Request not found
+  post:
+    summary: Send an outgoing friend request
+    tags: [Friends]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the user you want to send a friend request to
+    responses:
+      '200':
+        description: Request sent successsfully
+      '400':
+        description: Current user ID is the same as the id parameter or these users are friends already 

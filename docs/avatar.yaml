@@ -2,17 +2,23 @@ tags:
   name: Avatars
   description: Avatar management and retrieval
 
-/avatar/{filename}:
+/avatar/{userID}/{avatarHash}:
   get:
     summary: Gets stream of a filename
     tags: [Avatars]
     parameters:
       - in: path
-        name: filename
+        name: userID
         required: true
         schema:
           type: string
-        description: The name of the file to retrieve
+        description: ID of the user whose avatar you want to download
+      - in: path
+        name: avatarHash
+        required: true
+        schema:
+          type: string
+        description: User avatar hash that can be retrived from the user object
     responses:
       200:
         description: A stream of a file
