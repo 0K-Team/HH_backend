@@ -37,3 +37,29 @@ tags:
                 $ref: '../blog.yaml#/components/schemas/Blog'
       404:
         description: Blog not found
+
+/admin/CDN/{filename}:
+  post:
+    summary: Uploads an file from buffer to CDN
+    tags: [Admin]
+    requestBody:
+      required: true
+      content:
+        application/octet-stream:
+          schema:
+            type: string
+            format: binary
+    responses:
+      200:
+        description: File uploaded successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                fileUrl:
+                  type: string
+      500:
+        description: Error

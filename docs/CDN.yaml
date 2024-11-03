@@ -1,0 +1,25 @@
+tags:
+  name: CDN
+  description: CDN management and retrieval
+
+/CDN/{filename}:
+  get:
+    summary: Gets stream of a filename
+    tags: [CDN]
+    parameters:
+      - in: path
+        name: filename
+        required: true
+        schema:
+          type: string
+        description: Any file in CDN
+    responses:
+      200:
+        description: A stream of a file
+        content:
+          '*/*':
+            schema:
+              type: string
+              format: binary
+      500:
+        description: Error
