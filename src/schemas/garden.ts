@@ -1,40 +1,53 @@
 import { Schema, model } from "mongoose";
 
 const gardenSchema = new Schema({
+    user: {
+        type: String,
+        required: true,
+        unique: true
+    },
     plants: [
         {
-            plant_type: {
+            name: {
                 type: String,
                 required: true
             },
-            species: String,
-            growth_stage: String,
-            planted_date: {
-                type: Date,
+            type: {
+                type: String,
                 required: true
             },
-            points_earned: Number
+            growthStage: Number,
+            wateringNeeded: Number,
+            fertilizerNeeded: Number,
+            planted: {
+                type: Date,
+                default: () => new Date()
+            },
+            lastWatered: Date,
+            lastFertilized: Date,
+            harvestable: Boolean,
+            weedsRemovedNeeded: Number
         }
     ],
-    total_points: Number,
-    eco_simulation: {
-        current_environmental_impact: {
-            carbon_offset: Number,
-            oxygen_generated: Number,
-            biodiversity_score: Number
+    userActions: {
+        wateringCount: {
+            type: Number,
+            default: 0
         },
-        future_projections: {
-            carbon_offset: Number,
-            oxygen_generated: Number,
-            biodiversity_score: Number  
+        wateringMaxCount: Number,
+        wateringRefill: Date,
+        fertilizingCount: {
+            type: Number,
+            default: 0
         },
-        growth_progress: [
-            {
-                date: Date,
-                carbon_offset: Number,
-                oxygen_generated: Number
-            }
-        ]
+        fertilizingMaxCount: Number,
+        fertilizingRefill: Date,
+        weedsRemoved: {
+            type: Number,
+            default: 0
+        },
+        weedsMaxRemoved: Number,
+        weedsRefill: Date
     }
 });
 

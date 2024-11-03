@@ -1,0 +1,135 @@
+tags:
+  name: Garden
+  description: Garden management and retrieval
+
+  components:
+    schemas:
+      Garden:
+        type: object
+        properties:
+          user:
+            type: string
+            required: true
+            description: User to whom the garden belongs
+          plants:
+            type: array
+            items:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: ID of the plant document
+                name:
+                  type: string
+                  description: Name of the plant
+                  required: true
+                type:
+                  type: string
+                  description: Type of the plant
+                  required: true
+                growthStage:
+                  type: number
+                  description: Plant growth stage
+                fertilizerNeeded:
+                  type: number
+                  description: Amount of needed fertilizer
+                planted:
+                  type: string
+                  format: date
+                  description: Date when the plant was planted
+                lastWatered:
+                  type: string
+                  format: date
+                  description: Date when the plant was last watered
+                lastFertilized:
+                  type: string
+                  format: date
+                  description: Date when the plant was last fertilized
+                harvestable:
+                  type: boolean
+                  description: Whether the plant is harvestable
+                weedsRemovedNeeded:
+                  type: number
+              description: Plants planted in that garden
+          userActions:
+            type: object
+            properties:
+              wateringCount:
+                type: number
+              wateringMaxCount:
+                type: number
+              wateringRefill:
+                type: string
+                format: date
+              fertilizingCount:
+                type: number
+              fertilizingMaxCount:
+                type: number
+              fertilizingRefill:
+                type: string
+                format: date
+              weedsRemoved:
+                type: number
+              weedsMaxRemoved:
+                type: number
+              weedsRefill:
+                type: string
+                format: date
+            description: Fields related to using the garden
+
+  /garden/me:
+    get:
+      tags: [Garden]
+      summary: Get current user's garden
+      responses:
+        200:
+          description: User garden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Garden'
+
+  /garden/user/{id}:
+    get:
+      tags: [Garden]
+      summary: Get user's garden
+      responses:
+        200:
+          description: User garden
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Garden'
+        404:
+          description: User does not exist or it does not have an associated garden
+
+  /garden/top:
+    get:
+      tags: [Garden]
+      summary: Get top gardens
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+          description: Number of gardens per page
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Garden'
+                  properties:
+                    score:
+                      type: number
+                      description: 'Score of the garden calculated using following formula: # of plants * sum of plant growth states'

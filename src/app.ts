@@ -32,7 +32,7 @@ app.use(passport.initialize());
 
 app.use("/v1/", routes);
 
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   res.set('Cache-Control', 'no-store');
   next();
 });

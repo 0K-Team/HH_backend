@@ -9,6 +9,7 @@ import passport from "passport";
 import { admin } from "../middlewares/admin";
 import CDNRouter from "./CDNRouter";
 import quizRouter from "./quizRouter";
+import gardenRouter from "./gardenRouter";
 
 const router = Router();
 
@@ -18,7 +19,9 @@ router.use("/avatar", avatarRouter);
 
 router.use("/blogs", blogRouter);
 router.use("/posts", postsRouter);
+
 router.use("/quizzes", quizRouter);
+router.use("/garden", gardenRouter);
 
 router.use("/CDN", CDNRouter);
 
