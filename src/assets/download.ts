@@ -23,3 +23,13 @@ export const downloadPostImage = async (postID: string, hash: string, writableSt
 export const downloadCDN = async (filename: string, writableStream: Writable) => {
     download(`CDN/${filename}`, writableStream);
 }
+
+export const listAllCDN = async () => {
+    const iter = containerClient.listBlobsFlat({ prefix: "CDN/" });
+    let list: string[] = [];
+    for await (const item of iter) {
+        const stringItem = item.name;
+        list.push(stringItem.replace(/^CDN\//, ''));
+    }
+    return list;
+}

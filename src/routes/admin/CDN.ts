@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { uploadCDN } from '../../assets/upload';
+import { listAllCDN } from "../../assets/download";
 
 const router = Router();
 
@@ -22,6 +23,16 @@ router.post("/:filename", async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: (error as Error).message });
     }
-})
+});
+
+router.get("/", async (req, res) => {
+    try {
+        const allCDN = await listAllCDN();
+
+        res.status(200).send(allCDN);
+    } catch (error) {
+        res.status(500).json({ error: (error as Error).message });
+    }
+});
 
 export default router;
