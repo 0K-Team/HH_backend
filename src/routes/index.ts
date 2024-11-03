@@ -8,6 +8,7 @@ import adminRouter from "./admin";
 import passport from "passport";
 import { admin } from "../middlewares/admin";
 import CDNRouter from "./CDNRouter";
+import quizRouter from "./quizRouter";
 
 const router = Router();
 
@@ -17,6 +18,7 @@ router.use("/avatar", avatarRouter);
 
 router.use("/blogs", blogRouter);
 router.use("/posts", postsRouter);
+router.use("/quizzes", quizRouter);
 
 router.use("/CDN", CDNRouter);
 
