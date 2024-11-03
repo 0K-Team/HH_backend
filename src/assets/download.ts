@@ -19,3 +19,7 @@ export const downloadAvatar = async (userID: string, avatarHash: string, writabl
 export const downloadPostImage = async (postID: string, hash: string, writableStream: Writable) => {
     download(`posts/${postID}/${hash}`, writableStream);
 }
+
+export const downloadCDN = async (filename: string, writableStream: Writable) => {
+    download(`CDN/${filename}`, writableStream);
+}
