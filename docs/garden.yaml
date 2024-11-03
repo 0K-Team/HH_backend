@@ -128,12 +128,11 @@ components:
             schema:
               type: array
               items:
-                schema:
-                  type: object
-                  allOf:
-                    - $ref: '#/components/schemas/Garden'
-                    - type: object
-                      properties:
-                        score:
-                          type: number
-                          description: 'Score of the garden calculated using following formula: # of plants * sum of plant growth states'
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/Garden'
+                  - type: object
+                    properties:
+                      score:
+                        type: number
+                        description: 'Score of the garden calculated using following formula: # of plants * sum of plant growth states'
