@@ -1,7 +1,7 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const quizSchema = new Schema({
-    title: {
+    topic: {
         type: String,
         required: true
     },
@@ -12,12 +12,13 @@ const quizSchema = new Schema({
                 type: String,
                 required: true
             },
-            options: [
-                {
-                    text: String
-                }
-            ],
-            correct_option_id: Types.ObjectId
+            answers: {
+                A: String,
+                B: String,
+                C: String,
+                D: String,
+            },
+            correct_answer: String,
         }
     ],
     difficulty_level: String,
