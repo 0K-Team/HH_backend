@@ -65,6 +65,19 @@ components:
           type: integer
           default: 10
         description: Number of posts per page
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            user:
+              type: string
+              description: User ID of the users whose posts you want to see
+              required: false
+            tag:
+              type: string
+              description: Post tag that all returned posts should have
+              required: false
     responses:
       200:
         description: A list of posts
