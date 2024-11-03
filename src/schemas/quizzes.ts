@@ -21,7 +21,7 @@ const quizSchema = new Schema({
         }
     ],
     difficulty_level: String,
-    categoru: String,
+    category: String,
     time_limit: Number,
     points_reward: Number,
 });
