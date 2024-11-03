@@ -20,6 +20,6 @@ router.use("/posts", postsRouter);
 
 router.use("/CDN", CDNRouter);
 
-router.use("/admin", admin(), adminRouter);
+router.use("/admin", passport.authenticate("jwt", { session: false }), admin(), adminRouter);
 
 export default router;
