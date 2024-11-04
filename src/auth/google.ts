@@ -37,9 +37,9 @@ passport.use(new GoogleStrategy({
         $setOnInsert: {
             username: displayName,
             provider: "google",
-        },
-        fullName: name,
-        googleID: id
+            fullName: name,
+            googleID: id
+        }
     }, {
         upsert: true,
         new: true
@@ -87,12 +87,12 @@ passport.use("googleToken", new CustomStrategy(
                 $setOnInsert: {
                     username: payload.name,
                     provider: "google",
-                },
-                fullName: {
-                    givenName: payload.given_name,
-                    familyName: payload.family_name
-                },
-                googleID: payload.sub
+                    fullName: {
+                        givenName: payload.given_name,
+                        familyName: payload.family_name
+                    },
+                    googleID: payload.sub
+                }
             }, {
                 upsert: true,
                 new: true

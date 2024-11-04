@@ -36,9 +36,9 @@ passport.use(new FacebookStrategy({
         $setOnInsert: {
             username,
             provider: "facebook",
-        },
-        fullName: name,
-        facebookID: id
+            fullName: name,
+            facebookID: id
+        }
     }, {
         upsert: true,
         new: true
