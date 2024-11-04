@@ -77,7 +77,7 @@ export const UserValidator = Joi.object({
         })),
     friends: Joi
         .array()
-        .items(UserIdValidator),
+        .items(Joi.string().length(15).pattern(/^[0-9]{15}$/)),
     bio: Joi
         .string()
         .min(1)
