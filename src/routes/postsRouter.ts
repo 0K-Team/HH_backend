@@ -102,7 +102,7 @@ router.post("/like/:id", passport.authenticate("jwt", { session: false }), async
         }
     }, { new: true })
 
-    res.status(200).send({ likes: post?.likes.length });
+    res.status(200).send(post);
 })
 
 router.delete("/like/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
@@ -115,7 +115,7 @@ router.delete("/like/:id", passport.authenticate("jwt", { session: false }), asy
         }
     }, { new: true })
 
-    res.status(200).send({ likes: post?.likes.length });
+    res.status(200).send(post);
 })
 
 export default router;

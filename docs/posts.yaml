@@ -209,11 +209,7 @@ components:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                likes:
-                  type: number
-                  description: Amount of likes the post has
+              $ref: '#/components/schemas/Post'
   delete:
     summary: Remove a like from a post
     tags: [Posts]
@@ -230,8 +226,4 @@ components:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                likes:
-                  type: number
-                  description: Amount of likes the post has
+              $ref: '#/components/schemas/Post'
