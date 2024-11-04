@@ -6,7 +6,7 @@ import { PostValidator } from "../validators";
 const router = Router();
 
 router.get("/", async (req, res) => {
-    const { user, tag } = req.body;
+    const { user, tag } = req.query;
 
     const page = parseInt(req.query.page as string) || 1; 
     const limit = parseInt(req.query.limit as string) || 10;
@@ -20,8 +20,8 @@ router.get("/", async (req, res) => {
     if (page > pages) return res.sendStatus(400), undefined;
 
     const query: { author?: string, tags?: string } = {};
-    if (user) query["author"] = user;
-    if (tag) query["tags"] = tag;
+    if (user) query["author"] = user as string;
+    if (tag) query["tags"] = tag as string;
 
     const posts = await PostSchema.find(query).sort({ createdAt: -1 }).skip(start).limit(limit);
 
