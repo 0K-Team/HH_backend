@@ -212,4 +212,17 @@ router.delete("/me/skill", validateBody(Joi.object({ skill: Joi.string().require
     res.send(user);
 })
 
+router.patch("/me/title", validateBody(Joi.object({ title: Joi.string().required().max(20) })), async (req, res) => {
+    const { title } = await req.body;
+
+    const user = await AccountData.findOneAndUpdate({
+        // @ts-ignore
+        id: req.user.id,
+    }, {
+        title,
+    }, { new: true });
+
+    res.send(user);
+})
+
 export default router;

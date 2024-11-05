@@ -350,7 +350,7 @@ components:
           schema:
             type: object
             properties:
-              achievement:
+              skill:
                 type: string
     responses:
       200:
@@ -376,7 +376,7 @@ components:
           schema:
             type: object
             properties:
-              achievement:
+              skill:
                 type: string
     responses:
       200:
@@ -390,3 +390,30 @@ components:
       500:
         description: Internal server error
     
+/user/me/title:
+  post:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
+    summary: Changes title of a logged in user
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
