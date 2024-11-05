@@ -170,14 +170,17 @@ router.post("/me/configure", validateBody(Joi.object({
     res.send(user);
 })
 
-router.post("/me/achievement", validateBody(Joi.object({ achivement: Joi.string().required().max(20) })), async (req, res) => {
+router.post("/me/achievement", validateBody(Joi.object({ achievement: Joi.string().required().max(30) })), async (req, res) => {
     const { achievement } = req.body;
 
     const user = await AccountData.findOneAndUpdate({
         // @ts-ignore
         id: req.user.id
     }, { 
-        $push: { achievements: achievement },
+        $push: { achievements: {
+            name: achievement,
+            date_awarded: new Date()
+        }},
     }, { new: true });
 
     res.send(user);
