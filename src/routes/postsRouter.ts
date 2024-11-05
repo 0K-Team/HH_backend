@@ -25,8 +25,6 @@ router.get("/", validateQuery(Joi.object({
     const total = await PostSchema.countDocuments();
     const pages = Math.ceil(total / limit);
 
-    if (page > pages) return res.sendStatus(400), undefined;
-
     const query: { author?: string, tags?: string } = {};
     if (user) query["author"] = user as string;
     if (tag) query["tags"] = tag as string;

@@ -41,8 +41,6 @@ router.get("/top", validateQuery(Joi.object({
     const total = await GardenSchema.countDocuments();
     const pages = Math.ceil(total / limit);
 
-    if (page > pages) return res.sendStatus(400), undefined;
-
     const posts = await GardenSchema
         .aggregate()
         .addFields({
