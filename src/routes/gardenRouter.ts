@@ -1,6 +1,7 @@
 import { Router } from "express";
 import GardenSchema from "../schemas/garden";
 import passport from "passport";
+import { GardenHandler } from "../handlers/gardenHandler";
 
 const router = Router();
 
@@ -63,6 +64,40 @@ router.get("/top", async (req, res) => {
         total,
         pages
     })
+})
+
+router.post("/me/action/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {    
+    const { id } = req.params;
+    const { action } = req.body;
+    // @ts-ignore
+    const user = req.user.id;
+
+    const garden = await GardenSchema.findOne({
+        user,
+        "plants._id": id
+    }, {
+        "plants.$": 1
+    });
+
+    const currentPlant = garden ? garden.plants[0] : null;
+    
+    if (!currentPlant) return res.sendStatus(404), undefined;
+
+    let actionRes = null;
+
+    if (action == "water") actionRes = await GardenHandler.water(user, id);
+    else if (action == "fertilizer") actionRes = await GardenHandler.fertilize(user, id);
+    else if (action == "weeds") actionRes = await GardenHandler.weedsRemove(user, id);
+    else return res.status(400).send("Unknown action"), undefined;
+
+    if (actionRes[0]) {
+        const error = actionRes[0];
+        if (error == 1) return res.status(404).send("This user does not have a garden yet"), undefined;
+        if (error == 2) return res.status(404).send("This plant does not exist"), undefined;
+        return res.status(400).send("Action rejected"), undefined;
+    }
+
+    res.send(actionRes[1]);
 })
 
 export default router;

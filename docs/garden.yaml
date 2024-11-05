@@ -89,6 +89,39 @@ components:
             schema:
               $ref: '#/components/schemas/Garden'
 
+/garden/me/action/{id}:
+  post:
+    tags: [Garden]
+    summary: Perform an action on a plant
+    parameters:
+      - in: path
+        name: id
+        description: ID of the plant (_id field)
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              action:
+                type: string
+                enum: [water, fertilizer, weeds]
+    responses:
+      200:
+        description: Plant updated sucessfully
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Garden'
+      400:
+        description: Either "Unknown action" or "Action rejected". An action can be rejected when it isn't needed or it's limited by user capabilties (maxCount)
+      404:
+        description: Plant not found or the user doesn't have a garden
+
 /garden/user/{id}:
   get:
     tags: [Garden]
