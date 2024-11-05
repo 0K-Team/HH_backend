@@ -186,4 +186,17 @@ router.post("/me/achievement", validateBody(Joi.object({ achievement: Joi.string
     res.send(user);
 })
 
+router.post("/me/skill", validateBody(Joi.object({ skill: Joi.string().required().max(20) })), async (req, res) => {
+    const { skill } = await req.body;
+
+    const user = await AccountData.findOneAndUpdate({
+        // @ts-ignore
+        id: req.user.id,
+    }, {
+        $push: { skills: skill },
+    }, { new: true });
+
+    res.send(user);
+})
+
 export default router;

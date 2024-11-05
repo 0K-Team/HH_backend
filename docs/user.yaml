@@ -314,6 +314,34 @@ components:
       - bearerAuth: []
     tags:
       - User
+    summary: Pushes achievement to users achievements
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              achievement:
+                type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
+
+/user/me/skill:
+  post:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
     summary: Pushes achievement to users achievements (max 6)
     requestBody:
       required: true
