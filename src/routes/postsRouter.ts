@@ -1,11 +1,19 @@
 import { Router } from "express";
 import PostSchema from "../schemas/posts";
+import AccountSchema from "../schemas/accounts";
 import passport from "passport";
-import { PostValidator } from "../validators";
+import { ObjectIdValidatorParams, PostValidator } from "../validators";
+import { validateParams, validateQuery, validateBody } from "../middlewares/validate";
+import Joi from "joi";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.get("/", validateQuery(Joi.object({
+    user: Joi.string().pattern(/^[0-9]{15}$/).length(15),
+    tag: Joi.string(),
+    page: Joi.number(),
+    limit: Joi.number()
+})), async (req, res) => {
     const { user, tag } = req.query;
 
     const page = parseInt(req.query.page as string) || 1; 
@@ -34,7 +42,7 @@ router.get("/", async (req, res) => {
     })
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => {
     const { id } = req.params;
     const post = await PostSchema.findById(id);
 
@@ -42,7 +50,11 @@ router.get("/:id", async (req, res) => {
     res.send(post);
 });
 
-router.post("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post("/", validateBody(Joi.object({
+    content: Joi.string().min(1).max(300).required(),
+    images: Joi.array().items(Joi.string()),
+    tags: Joi.array().items(Joi.string().max(64))
+})), passport.authenticate("jwt", { session: false }), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.sendStatus(401), undefined;
     const {
@@ -59,20 +71,31 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
     res.send(post);
 });
 
-router.delete("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.delete("/:id", validateParams(ObjectIdValidatorParams), passport.authenticate("jwt", { session: false }), async (req, res) => {
     const { id } = req.params;
 
     const post = await PostSchema.findById(id);
 
     if (!post) return res.sendStatus(404), undefined;
+
     // @ts-ignore
-    if (post && post.author != req.user.id) return res.sendStatus(403), undefined;
+    const userID = req.user.id;
+    const user = await AccountSchema.findOne({
+        id: userID
+    })
+
+    // @ts-ignore
+    if (post && post.author != userID && !user?.admin) return res.sendStatus(403), undefined;
    
     await PostSchema.findByIdAndDelete(id);
     res.sendStatus(200);
 })
 
-router.put("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.put("/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.object({
+    content: Joi.string().min(1).max(300).required(),
+    tags: Joi.array().items(Joi.string().min(1).max(64)),
+    images: Joi.array().items(Joi.string())
+})), passport.authenticate("jwt", { session: false }), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.sendStatus(401), undefined;
 
@@ -92,7 +115,7 @@ router.put("/:id", passport.authenticate("jwt", { session: false }), async (req,
     res.send(newPost);
 })
 
-router.post("/like/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post("/like/:id", validateParams(ObjectIdValidatorParams), passport.authenticate("jwt", { session: false }), async (req, res) => {
     const { id } = req.params;
     
     const post = await PostSchema.findByIdAndUpdate(id, {
@@ -105,7 +128,7 @@ router.post("/like/:id", passport.authenticate("jwt", { session: false }), async
     res.status(200).send(post);
 })
 
-router.delete("/like/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.delete("/like/:id", validateParams(ObjectIdValidatorParams), passport.authenticate("jwt", { session: false }), async (req, res) => {
     const { id } = req.params;
     
     const post = await PostSchema.findByIdAndUpdate(id, {

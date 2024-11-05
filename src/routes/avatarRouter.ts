@@ -2,10 +2,16 @@ import express, { Request, Response } from 'express';
 import { downloadAvatar } from '../assets/download';
 import { uploadAvatar } from '../assets/upload';
 import md5 from 'md5';
+import { validateParams } from '../middlewares/validate';
+import Joi from 'joi';
+import { UserIdValidator } from '../validators';
 
 const router = express.Router();
 
-router.get('/:userID/:avatarHash', async (req: Request, res: Response) => {
+router.get('/:userID/:avatarHash', validateParams(Joi.object({
+    userID: UserIdValidator,
+    avatarHash: Joi.string().required().hex().length(32)
+})), async (req: Request, res: Response) => {
     try {
         res.setHeader('Content-Type', 'image/jpeg');
         await downloadAvatar(req.params.userID, req.params.avatarHash, res);

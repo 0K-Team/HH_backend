@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { BlogValidator } from "../../validators";
+import { BlogValidator, ObjectIdValidatorParams } from "../../validators";
 import BlogSchema from "../../schemas/blogs";
+import { validateParams } from "../../middlewares/validate";
 
 const router = Router();
 
@@ -12,7 +13,7 @@ router.post("/", async (req, res) => {
     res.send(blog);
 })
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => {
     const { id } = req.params;
 
     const blog = await BlogSchema.findByIdAndDelete(id);

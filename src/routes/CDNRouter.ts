@@ -1,9 +1,11 @@
 import express, { Request, Response } from 'express';
 import { downloadCDN } from '../assets/download';
+import Joi from 'joi';
+import { validateParams } from '../middlewares/validate';
 
 const router = express.Router();
 
-router.get("/:filename", async (req: Request, res: Response) => {
+router.get("/:filename", validateParams(Joi.object({ filename: Joi.string().required() })), async (req: Request, res: Response) => {
     const filename = req.params.filename;
     try {
         await downloadCDN(filename, res);

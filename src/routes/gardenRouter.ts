@@ -2,6 +2,9 @@ import { Router } from "express";
 import GardenSchema from "../schemas/garden";
 import passport from "passport";
 import { GardenHandler } from "../handlers/gardenHandler";
+import { validateParams, validateQuery } from "../middlewares/validate";
+import { UserIdValidator } from "../validators";
+import Joi from "joi";
 
 const router = Router();
 
@@ -14,7 +17,7 @@ router.get("/me", passport.authenticate("jwt", { session: false }), async (req, 
     res.send(garden);
 });
 
-router.get("/user/:id", async (req, res) => {
+router.get("/user/:id", validateParams(Joi.object({ id: UserIdValidator })), async (req, res) => {
     const { id } = req.params;
 
     const garden = await GardenSchema.findOne({
@@ -25,7 +28,10 @@ router.get("/user/:id", async (req, res) => {
     else res.send(garden);
 })
 
-router.get("/top", async (req, res) => {
+router.get("/top", validateQuery(Joi.object({
+    page: Joi.number(),
+    limit: Joi.number()
+})), async (req, res) => {
     const page = parseInt(req.query.page as string) || 1; 
     const limit = parseInt(req.query.limit as string) || 10;
     if (page < 1) return res.sendStatus(400), undefined;

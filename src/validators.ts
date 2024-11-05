@@ -4,7 +4,16 @@ export const UserIdValidator = Joi
     .string()
     .length(15)
     .required()
-    .pattern(/^[0-9]{15}$/)
+    .pattern(/^[0-9]{15}$/);
+
+export const ObjectIdValidator = Joi
+    .string()
+    .hex()
+    .length(24);
+
+export const ObjectIdValidatorParams = Joi.object({
+    id: ObjectIdValidator
+}).options({ stripUnknown: true });
 
 export const PostValidator = Joi.object({
     _id: Joi
@@ -49,12 +58,10 @@ export const UserValidator = Joi.object({
                 .object(),
             givenName: Joi
                 .string()
-                .min(1)
-                .max(50),
+                .max(32),
             familyName: Joi
                 .string()
-                .min(1)
-                .max(50)
+                .max(32)
         }),
     avatarHash: Joi
         .string(),
@@ -80,7 +87,6 @@ export const UserValidator = Joi.object({
         .items(Joi.string().length(15).pattern(/^[0-9]{15}$/)),
     bio: Joi
         .string()
-        .min(1)
         .max(230),
     achievements: Joi
         .array()
@@ -97,7 +103,9 @@ export const UserValidator = Joi.object({
         .array()
         .items(Joi.string()),
     location: Joi
-        .string(),
+        .string()
+        .min(2)
+        .max(100),
     preferredTopics: Joi
         .array()
         .items(Joi.string().min(1).max(64)),

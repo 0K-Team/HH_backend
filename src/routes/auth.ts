@@ -38,7 +38,7 @@ router.get("/googleToken", passport.authenticate("googleToken", { failureRedirec
         accountID: id
     }, process.env.JWT_SECRET as string);
     res.cookie("jwt", token);
-    if (! mailSent) {
+    if (!mailSent) {
         sendAccountRegistration(email, username);
         await AccountSchema.updateOne({
             id

@@ -1,6 +1,9 @@
 import { Router } from "express";
 import AccountData from "../../schemas/accounts"
-import { UserValidator } from "../../validators";
+import { UserIdValidator, UserValidator } from "../../validators";
+import Joi from "joi";
+import { validateBody, validateParams } from "../../middlewares/validate";
+import { COUNTRY_CODES } from "../../constants";
 
 const router = Router();
 
@@ -8,7 +11,7 @@ router.get("/me", (req, res) => {
     res.send(req.user);
 })
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", validateParams(Joi.object({ id: UserIdValidator })), async (req, res) => {
     const { id } = req.params;
     
     const user = await AccountData.findOne({
@@ -20,7 +23,7 @@ router.get("/:id", async (req, res) => {
     res.send(user);
 })
 
-router.patch("/me/username", async (req, res) => {
+router.patch("/me/username", validateBody(Joi.object({ username: Joi.string().required().min(2).max(32) })), async (req, res) => {
     const { username } = req.body;
     try {
         const result = await AccountData.findOneAndUpdate({
@@ -36,7 +39,7 @@ router.patch("/me/username", async (req, res) => {
     }
 })
 
-router.patch("/me/firstName", async (req, res) => {
+router.patch("/me/firstName", validateBody(Joi.object({ firstName: Joi.string().max(32) })), async (req, res) => {
     const { firstName } = req.body;
     try {
         const result = await AccountData.findOneAndUpdate({
@@ -52,7 +55,7 @@ router.patch("/me/firstName", async (req, res) => {
     }
 })
 
-router.patch("/me/lastName", async (req, res) => {
+router.patch("/me/lastName", validateBody(Joi.object({ lastName: Joi.string().max(32) })), async (req, res) => {
     const { lastName } = req.body;
     try {
         const result = await AccountData.findOneAndUpdate({
@@ -68,17 +71,8 @@ router.patch("/me/lastName", async (req, res) => {
     }
 })
 
-router.patch("/me/bio", async (req, res) => {
+router.patch("/me/bio", validateBody(Joi.object({ bio: Joi.string().required().max(230) })), async (req, res) => {
     const { bio } = req.body;
-
-    const user = await AccountData.findOne({
-        // @ts-ignore
-        id: req.user.id
-    });
-
-    // @ts-ignore
-    const validated = UserValidator.validate({ ...user?.toObject(), bio });
-    if (validated.error) return res.sendStatus(400), console.log(validated.error.details), undefined;
 
     const newUser = await AccountData.findOneAndUpdate({
         // @ts-ignore
@@ -88,7 +82,7 @@ router.patch("/me/bio", async (req, res) => {
     res.send(newUser);
 })
 
-router.patch("/me/location", async (req, res) => {
+router.patch("/me/location", validateBody(Joi.object({ location: Joi.string().required().max(100) })), async (req, res) => {
     const { location } = req.body;
 
     const newUser = await AccountData.findOneAndUpdate({
@@ -99,7 +93,7 @@ router.patch("/me/location", async (req, res) => {
     res.send(newUser);
 })
 
-router.patch("/me/country", async (req, res) => {
+router.patch("/me/country", validateBody(Joi.object({ country: Joi.string().valid(...Object.keys(COUNTRY_CODES)) })), async (req, res) => {
     const { country } = req.body;
 
     const user = await AccountData.findOneAndUpdate({
@@ -110,7 +104,7 @@ router.patch("/me/country", async (req, res) => {
     res.send(user);
 })
 
-router.post("/me/preferredTopics/:topic", async (req, res) => {
+router.post("/me/preferredTopics/:topic", validateParams(Joi.object({ topic: Joi.string().min(1).max(32) })), async (req, res) => {
     const topic: String = req.params.topic;
     //@ts-ignore
     const id = req.user.id;
@@ -124,7 +118,7 @@ router.post("/me/preferredTopics/:topic", async (req, res) => {
     res.send(response);
 })
 
-router.delete("/me/preferredTopics/:topic", async (req, res) => {
+router.delete("/me/preferredTopics/:topic", validateParams(Joi.object({ topic: Joi.string().min(1).max(32) })), async (req, res) => {
     const topic: String = req.params.topic;
     //@ts-ignore
     const id = req.user.id;
@@ -138,7 +132,14 @@ router.delete("/me/preferredTopics/:topic", async (req, res) => {
     res.send(response);
 })
 
-router.post("/me/configure", async (req, res) => {
+router.post("/me/configure", validateBody(Joi.object({
+    username: Joi.string().min(2).max(32),
+    firstName: Joi.string().max(32),
+    familyName: Joi.string().max(32),
+    bio: Joi.string().max(230),
+    location: Joi.string().min(2).max(100),
+    country: Joi.string().valid(...Object.keys(COUNTRY_CODES))
+})), async (req, res) => {
     // @ts-ignore
     const id = req.user.id;
     

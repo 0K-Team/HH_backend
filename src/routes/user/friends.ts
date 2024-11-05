@@ -1,6 +1,9 @@
 import { Router } from "express";
 import FriendRequestsSchema from "../../schemas/friendRequests";
 import AccountSchema from "../../schemas/accounts";
+import { validateParams } from "../../middlewares/validate";
+import Joi from "joi";
+import { UserIdValidator } from "../../validators";
 
 const router = Router();
 
@@ -34,7 +37,7 @@ router.get("/requests/me", async (req, res) => {
 })
 
 // new request (user id)
-router.post("/requests/me/:id", async (req, res) => {
+router.post("/requests/me/:id", validateParams(Joi.object({ id: UserIdValidator })), async (req, res) => {
     const { id } = req.params;
     // @ts-ignore
     const userID = req.user.id;
@@ -61,7 +64,7 @@ router.post("/requests/me/:id", async (req, res) => {
 })
 
 // reject an ingoing request (user id)
-router.delete("/requests/:id", async (req, res) => {
+router.delete("/requests/:id", validateParams(Joi.object({ id: UserIdValidator })), async (req, res) => {
     const { id } = req.params;
     
     const request = await FriendRequestsSchema.findOneAndDelete({
@@ -74,7 +77,7 @@ router.delete("/requests/:id", async (req, res) => {
 })
 
 // retract an outgoing request (user id)
-router.delete("/requests/me/:id", async (req, res) => {
+router.delete("/requests/me/:id", validateParams(Joi.object({ id: UserIdValidator })), async (req, res) => {
     const { id } = req.params;
 
     const request = await FriendRequestsSchema.findOneAndDelete({
@@ -87,7 +90,7 @@ router.delete("/requests/me/:id", async (req, res) => {
 })
 
 // accept an ingoing request (user id)
-router.post("/requests/:id", async (req, res) => {
+router.post("/requests/:id", validateParams(Joi.object({ id: UserIdValidator })), async (req, res) => {
     const { id } = req.params;
     // @ts-ignore
     const userID = req.user.id;

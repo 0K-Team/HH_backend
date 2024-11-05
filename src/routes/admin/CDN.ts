@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { uploadCDN } from '../../assets/upload';
 import { listAllCDN } from "../../assets/download";
+import Joi from "joi";
+import { validateParams } from "../../middlewares/validate";
 
 const router = Router();
 
-router.post("/:filename", async (req, res) => {
+router.post("/:filename", validateParams(Joi.object({ filename: Joi.string().required() })), async (req, res) => {
     try {
         const filename = req.params.filename;
         // Create a buffer from the incoming request
