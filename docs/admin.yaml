@@ -79,3 +79,17 @@ tags:
                 type: string
       500:
         description: Error
+
+/admin/possibleTopics:
+  post:
+    summary: Post a possible topic
+    tags: [Admin]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              topic:
+                type: string

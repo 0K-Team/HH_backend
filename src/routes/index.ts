@@ -10,6 +10,7 @@ import { admin } from "../middlewares/admin";
 import CDNRouter from "./CDNRouter";
 import quizRouter from "./quizRouter";
 import gardenRouter from "./gardenRouter";
+import possibleTopicsRouter from "./possibleTopicsRouter";
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.use("/posts", postsRouter);
 
 router.use("/quizzes", quizRouter);
 router.use("/garden", gardenRouter);
+router.use("/possibleTopics", possibleTopicsRouter);
 
 router.use("/CDN", CDNRouter);
 

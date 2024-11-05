@@ -1,0 +1,28 @@
+tags:
+  name: PossibleTopics
+  description: Possible topics retrieval
+
+  components:
+    schemas:
+      PossibleTopic:
+        type: object
+        properties:
+          name:
+            type: string
+            description: The name of the possible topic
+
+/possibleTopics:
+  get:
+    summary: Get all possible topics
+    tags: [PossibleTopics]
+    responses:
+      200:
+        description: A list of possible topics
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PossibleTopic'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
