@@ -2,8 +2,8 @@ import { Router } from "express";
 import GardenSchema from "../schemas/garden";
 import passport from "passport";
 import { GardenHandler } from "../handlers/gardenHandler";
-import { validateParams, validateQuery } from "../middlewares/validate";
-import { UserIdValidator } from "../validators";
+import { validateBody, validateParams, validateQuery } from "../middlewares/validate";
+import { ObjectIdValidatorParams, UserIdValidator } from "../validators";
 import Joi from "joi";
 
 const router = Router();
@@ -72,7 +72,7 @@ router.get("/top", validateQuery(Joi.object({
     })
 })
 
-router.post("/me/action/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {    
+router.post("/me/action/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.object({ action: Joi.string().valid("water", "fertilizer", "weeds") })), passport.authenticate("jwt", { session: false }), async (req, res) => {    
     const { id } = req.params;
     const { action } = req.body;
     // @ts-ignore

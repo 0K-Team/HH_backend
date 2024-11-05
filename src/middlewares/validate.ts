@@ -4,7 +4,7 @@ import Joi from "joi";
 export const validateBody = (validator: Joi.AnySchema) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const validated = validator.options({ stripUnknown: true }).validate(req.body);
-        if (validated.error) res.status(400).send(`Validation of request body failed: ${validated.error.message}`);
+        if (validated.error) return res.status(400).send(`Validation of request body failed: ${validated.error.message}`), undefined;
         next();
     }
 }
@@ -12,7 +12,7 @@ export const validateBody = (validator: Joi.AnySchema) => {
 export const validateParams = (validator: Joi.AnySchema) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const validated = validator.options({ stripUnknown: true }).validate(req.params);
-        if (validated.error) res.status(400).send(`Validation of request params failed: ${validated.error.message}`);
+        if (validated.error) return res.status(400).send(`Validation of request params failed: ${validated.error.message}`), undefined;
         next();
     }
 }
@@ -20,7 +20,7 @@ export const validateParams = (validator: Joi.AnySchema) => {
 export const validateQuery = (validator: Joi.AnySchema) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const validated = validator.options({ stripUnknown: true }).validate(req.query);
-        if (validated.error) res.status(400).send(`Validation of request params failed: ${validated.error.message}`);
+        if (validated.error) return res.status(400).send(`Validation of request params failed: ${validated.error.message}`), undefined;
         next();
     }
 }
