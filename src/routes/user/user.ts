@@ -199,4 +199,17 @@ router.post("/me/skill", validateBody(Joi.object({ skill: Joi.string().required(
     res.send(user);
 })
 
+router.delete("/me/skill", validateBody(Joi.object({ skill: Joi.string().required().max(20) })), async (req, res) => {
+    const { skill } = await req.body;
+
+    const user = await AccountData.findOneAndUpdate({
+        // @ts-ignore
+        id: req.user.id,
+    }, {
+        $pull: { skills: skill },
+    }, { new: true });
+
+    res.send(user);
+})
+
 export default router;

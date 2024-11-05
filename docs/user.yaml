@@ -342,7 +342,7 @@ components:
       - bearerAuth: []
     tags:
       - User
-    summary: Pushes achievement to users achievements (max 6)
+    summary: Pushes skill to users skills 
     requestBody:
       required: true
       content:
@@ -363,3 +363,30 @@ components:
         description: Bad request
       500:
         description: Internal server error
+  delete:
+    security:
+      - bearerAuth: []
+    tags:
+      - User
+    summary: Pulls skill from skills
+    equestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              achievement:
+                type: string
+    responses:
+      200:
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accounts'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error
+    
