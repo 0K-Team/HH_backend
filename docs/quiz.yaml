@@ -53,6 +53,12 @@ components:
     tags:
       - Quiz
     summary: Get all quizzes
+    parameters:
+      - in: query
+        name: category
+        required: true
+        schema:
+          type: string
     responses:
       200:
         description: A list of quizzes
