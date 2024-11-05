@@ -52,7 +52,6 @@ const accountSchema = new Schema({
         }
     ],
     skills: [String],
-    badges: [String],
     location: String,
     country: String,
     preferredTopics: [String],
