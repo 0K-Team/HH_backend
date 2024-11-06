@@ -128,3 +128,49 @@ export const BlogValidator = Joi.object({
         .max(1000)
         .required()
 }).options({ stripUnknown: true });
+
+export const ProductValidator = Joi.object({
+    name: Joi
+        .string()
+        .max(128)
+        .required(),
+    category: Joi
+        .string()
+        .max(128)
+        .required(),
+    brand: Joi
+        .string()
+        .max(128)
+        .required(),
+    price: Joi.number(),
+    currency: Joi
+        .string()
+        .length(3),
+    productUrl: Joi
+        .string(),
+    description: Joi
+        .string()
+        .max(400)
+        .required(),
+    carbonFootprint: Joi.object({
+        co2Emission: Joi.string(),
+        unit: Joi.string()
+    }),
+    durability: Joi.string(),
+    recyclingInfo: Joi
+        .string()
+        .max(400),
+    imageUrl: Joi.string(),
+    ecoCertification: Joi.string(),
+    ecoFriendly: Joi.boolean()
+});
+
+export const DiscountValidator = Joi.object({
+    discountCode: Joi.string().allow(""),
+    description: Joi.string().allow(""),
+    validUntil: Joi.date(),
+    partnerBrand: Joi.string().allow(""),
+    productRestrictions: Joi.string().allow(""),
+    termsAndConditions: Joi.string().allow(""),
+    url: Joi.string().allow("")
+})

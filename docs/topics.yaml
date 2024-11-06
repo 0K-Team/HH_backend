@@ -1,0 +1,28 @@
+tags:
+  name: Topics
+  description: Topics retrieval
+
+  components:
+    schemas:
+      Topic:
+        type: object
+        properties:
+          name:
+            type: string
+            description: The name of the topic
+
+/topics:
+  get:
+    summary: Get all topics
+    tags: [Topics]
+    responses:
+      200:
+        description: A list of topics
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Topic'
+      400:
+        description: Bad request
+      500:
+        description: Internal server error

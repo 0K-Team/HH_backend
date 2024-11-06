@@ -80,9 +80,9 @@ tags:
       500:
         description: Error
 
-/admin/possibleTopics:
+/admin/topics:
   post:
-    summary: Post a possible topic
+    summary: Add a topic
     tags: [Admin]
     requestBody:
       required: true
@@ -93,3 +93,141 @@ tags:
             properties:
               topic:
                 type: string
+
+/admin/products:
+  post:
+    summary: Add a product
+    tags: [Admin]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "../products.yaml#/components/schemas/Product"
+    responses:
+      200:
+        description: Added product
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "../products.yaml#/components/schemas/Product"
+
+/admin/products/{id}:
+  put:
+    summary: Modify a product
+    tags: [Admin]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the product
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "../products.yaml#/components/schemas/Product"
+    responses:
+      200:
+        description: New product
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "../products.yaml#/components/schemas/Product"
+      404:
+        description: Product not found
+  delete:
+    summary: Delete a product
+    tags: [Admin]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the product
+    responses:
+      200:
+        description: Deleted product
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "../products.yaml#/components/schemas/Product"
+      404:
+        description: Product not found
+
+/admin/products/discount:
+  post:
+    summary: Add a discount
+    tags: [Admin]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "../products.yaml#/components/schemas/Discount"
+    responses:
+      200:
+        description: Added discount
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "../products.yaml#/components/schemas/Discount"
+
+/admin/products/discount/{id}:
+  put:
+    summary: Modify a discount
+    tags: [Admin]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the discount
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "../products.yaml#/components/schemas/Discount"
+    responses:
+      200:
+        description: New discount
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "../products.yaml#/components/schemas/Discount"
+      404:
+        description: Discount not found
+  delete:
+    summary: Delete a discount
+    tags: [Admin]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the discount
+    responses:
+      200:
+        description: Deleted discount
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "../products.yaml#/components/schemas/Discount"
+      404:
+        description: Discount not found

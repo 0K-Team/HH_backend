@@ -95,8 +95,6 @@ components:
                   type: integer
                 pages:
                   type: integer
-      400:
-        description: Invalid page or limit
   post:
     summary: Create a new post
     tags: [Posts]

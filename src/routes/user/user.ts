@@ -39,7 +39,7 @@ router.patch("/me/username", validateBody(Joi.object({ username: Joi.string().re
     }
 })
 
-router.patch("/me/firstName", validateBody(Joi.object({ firstName: Joi.string().max(32) })), async (req, res) => {
+router.patch("/me/firstName", validateBody(Joi.object({ firstName: Joi.string().max(32).allow("") })), async (req, res) => {
     const { firstName } = req.body;
     try {
         const result = await AccountData.findOneAndUpdate({
@@ -55,7 +55,7 @@ router.patch("/me/firstName", validateBody(Joi.object({ firstName: Joi.string().
     }
 })
 
-router.patch("/me/lastName", validateBody(Joi.object({ lastName: Joi.string().max(32) })), async (req, res) => {
+router.patch("/me/lastName", validateBody(Joi.object({ lastName: Joi.string().max(32).allow("") })), async (req, res) => {
     const { lastName } = req.body;
     try {
         const result = await AccountData.findOneAndUpdate({
@@ -71,7 +71,7 @@ router.patch("/me/lastName", validateBody(Joi.object({ lastName: Joi.string().ma
     }
 })
 
-router.patch("/me/bio", validateBody(Joi.object({ bio: Joi.string().required().max(230) })), async (req, res) => {
+router.patch("/me/bio", validateBody(Joi.object({ bio: Joi.string().required().max(230).allow("") })), async (req, res) => {
     const { bio } = req.body;
 
     const newUser = await AccountData.findOneAndUpdate({
@@ -82,7 +82,7 @@ router.patch("/me/bio", validateBody(Joi.object({ bio: Joi.string().required().m
     res.send(newUser);
 })
 
-router.patch("/me/location", validateBody(Joi.object({ location: Joi.string().required().max(100) })), async (req, res) => {
+router.patch("/me/location", validateBody(Joi.object({ location: Joi.string().required().max(100).allow("") })), async (req, res) => {
     const { location } = req.body;
 
     const newUser = await AccountData.findOneAndUpdate({
@@ -134,10 +134,10 @@ router.delete("/me/preferredTopics/:topic", validateParams(Joi.object({ topic: J
 
 router.post("/me/configure", validateBody(Joi.object({
     username: Joi.string().min(2).max(32),
-    firstName: Joi.string().max(32),
-    familyName: Joi.string().max(32),
-    bio: Joi.string().max(230),
-    location: Joi.string().min(2).max(100),
+    firstName: Joi.string().max(32).allow(""),
+    familyName: Joi.string().max(32).allow(""),
+    bio: Joi.string().max(230).allow(""),
+    location: Joi.string().min(2).max(100).allow(""),
     country: Joi.string().valid(...Object.keys(COUNTRY_CODES))
 })), async (req, res) => {
     // @ts-ignore

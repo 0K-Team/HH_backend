@@ -1,6 +1,6 @@
 tags:
   name: Blogs
-  description: Blog management and retrieval
+  description: Blog retrieval
 
 components:
   schemas:

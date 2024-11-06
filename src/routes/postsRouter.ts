@@ -37,7 +37,7 @@ router.get("/", validateQuery(Joi.object({
         data: posts,
         total,
         pages
-    })
+    });
 });
 
 router.get("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => {
