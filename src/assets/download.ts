@@ -26,7 +26,7 @@ export const downloadCDN = async (filename: string, writableStream: Writable) =>
 
 export const listAllCDN = async () => {
     const iter = containerClient.listBlobsFlat({ prefix: "CDN/" });
-    let list: string[] = [];
+    const list = [];
     for await (const item of iter) {
         const stringItem = item.name;
         list.push(stringItem.replace(/^CDN\//, ''));

@@ -56,7 +56,9 @@ passport.use(new GoogleStrategy({
             }, {
                 avatarHash: hash
             }) ?? false);
-        } catch (err) {}
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return done(null, user);
@@ -109,12 +111,15 @@ passport.use("googleToken", new CustomStrategy(
                     }, {
                         avatarHash: hash
                     }) ?? false);
-                } catch (err) {}
+                } catch (error) {
+                    console.error(error);
+                }
             }
 
             done(null, user);
 
-        } catch (err) {
+        } catch (error) {
+            console.error(error);
             return done("Invalid token", false);
         }
     }

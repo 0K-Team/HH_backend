@@ -27,7 +27,7 @@ router.post("/:filename", validateParams(Joi.object({ filename: Joi.string().req
     }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", async (_, res) => {
     try {
         const allCDN = await listAllCDN();
 

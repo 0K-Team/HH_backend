@@ -46,7 +46,7 @@ export const UserValidator = Joi.object({
     id: UserIdValidator,
     email: Joi
         .string()
-        .pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
+        .pattern(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/),
     username: Joi
         .string()
         .required()

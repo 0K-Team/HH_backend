@@ -5,7 +5,7 @@ import { ObjectIdValidatorParams } from '../validators';
 
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (_, res: Response) => {
     const blogs = await BlogData.find();
     res.json(blogs);
 });

@@ -44,7 +44,7 @@ router.get("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => 
     const { id } = req.params;
     const post = await PostSchema.findById(id);
 
-    if (!post) res.status(404), undefined;
+    if (!post) return res.status(404), undefined;
     res.send(post);
 });
 

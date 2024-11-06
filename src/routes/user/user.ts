@@ -1,6 +1,6 @@
 import { Router } from "express";
 import AccountData from "../../schemas/accounts"
-import { UserIdValidator, UserValidator } from "../../validators";
+import { UserIdValidator } from "../../validators";
 import Joi from "joi";
 import { validateBody, validateParams } from "../../middlewares/validate";
 import { COUNTRY_CODES } from "../../constants";
@@ -105,7 +105,7 @@ router.patch("/me/country", validateBody(Joi.object({ country: Joi.string().vali
 })
 
 router.post("/me/preferredTopics/:topic", validateParams(Joi.object({ topic: Joi.string().min(1).max(32) })), async (req, res) => {
-    const topic: String = req.params.topic;
+    const topic = req.params.topic;
     //@ts-ignore
     const id = req.user.id;
 
@@ -119,7 +119,7 @@ router.post("/me/preferredTopics/:topic", validateParams(Joi.object({ topic: Joi
 })
 
 router.delete("/me/preferredTopics/:topic", validateParams(Joi.object({ topic: Joi.string().min(1).max(32) })), async (req, res) => {
-    const topic: String = req.params.topic;
+    const topic = req.params.topic;
     //@ts-ignore
     const id = req.user.id;
 
