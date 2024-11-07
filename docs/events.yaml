@@ -72,7 +72,7 @@ components:
             schema:
               $ref: '#/components/schemas/ReturnedEvent'
   post:
-    tags: [Event]
+    tags: [Events]
     summary: Send a new request for approval
     requestBody:
       required: true
