@@ -174,3 +174,11 @@ export const DiscountValidator = Joi.object({
     termsAndConditions: Joi.string().allow(""),
     url: Joi.string().allow("")
 })
+
+export const QuizValidator = Joi.object({
+    _id: ObjectIdValidator,
+    answers: Joi.array().items(Joi.object().keys({
+        id: ObjectIdValidator,
+        answer: Joi.string().min(1).max(1).pattern(/[A-D]/).required(),
+    }))
+})

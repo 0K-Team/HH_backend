@@ -369,7 +369,7 @@ components:
     tags:
       - User
     summary: Pulls skill from skills
-    equestBody:
+    requestBody:
       required: true
       content:
         application/json:

@@ -1,8 +1,9 @@
 import { Router } from "express";
 import QuizSchema from "../schemas/quizzes";
 import { validateParams, validateQuery } from "../middlewares/validate";
-import { ObjectIdValidator } from "../validators";
+import { ObjectIdValidatorParams, QuizValidator } from "../validators";
 import Joi from "joi";
+import { ObjectId } from "mongoose";
 
 const router = Router();
 
@@ -25,14 +26,28 @@ router.get("/", validateQuery(Joi.object({ category: Joi.string() })), async (re
     }
 })
 
-router.get("/:id", validateParams(ObjectIdValidator), async (req, res) => {
+router.get("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => {
     try {
-        const result = await QuizSchema.findById(req.params.id);
+        const result = await QuizSchema.findById(req.params.id, {
+            "questions.correct_answer": 0,
+        });
         
         res.status(200).send(result);
     } catch (error) {
         res.status(500).send(error);
     }
+})
+
+router.post("/submit", validateQuery(QuizValidator), async (req, res) => {
+    const { _id, answers } = req.body;
+    const quiz = await QuizSchema.findById(_id).exec();
+
+    const result = answers.map(((e: { answer: string | null | undefined; id: number; }) => {
+        const question = quiz?.questions?.[`${e.id}`];
+        return question?.correct_answer === e.answer;
+    }));
+
+    res.status(200).send(result);
 })
 
 export default router;

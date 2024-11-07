@@ -85,10 +85,50 @@ components:
         description: The ID of the quiz to retrieve
     responses:
       200:
-        description: A quiz object
+        description: A quiz object (exept of correct_answer)
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Quiz'
       500:
         description: Server error
+
+/quizzes/submit:
+  post:
+    tags:
+      - Quiz
+    summary: Posts answers, process them and return points and correct answers
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              _id:
+                type: string
+              answers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    answer:
+                      type: string
+    responses:
+      200:
+        description: A correct answers
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type: boolean
+      500:
+        description: Server error
+                
