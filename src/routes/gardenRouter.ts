@@ -1,7 +1,7 @@
 import { Router } from "express";
 import GardenSchema from "../schemas/garden";
 import passport from "passport";
-import { GardenHandler } from "../handlers/gardenHandler";
+import { GardenHandler } from "../handlers/GardenHandler";
 import { validateBody, validateParams, validateQuery } from "../middlewares/validate";
 import { ObjectIdValidatorParams, UserIdValidator } from "../validators";
 import Joi from "joi";
