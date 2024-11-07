@@ -38,7 +38,7 @@ router.get("/", validateQuery(Joi.object({
     });
 });
 
-router.get("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => {
+router.get("/product/:id", validateParams(ObjectIdValidatorParams), async (req, res) => {
     const product = await ProductSchema.findById(req.params.id);
     if (!product) return res.sendStatus(404), undefined;
 

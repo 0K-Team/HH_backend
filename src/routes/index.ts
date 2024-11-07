@@ -11,7 +11,7 @@ import CDNRouter from "./CDNRouter";
 import quizRouter from "./quizRouter";
 import gardenRouter from "./gardenRouter";
 import productsRouter from "./productsRouter";
-import topicsRouter from "./topicsRouter";
+import topicsRouter from "./preferredTopicsRouter";
 
 const router = Router();
 
@@ -26,7 +26,7 @@ router.use("/quizzes", quizRouter);
 router.use("/garden", gardenRouter);
 router.use("/products", productsRouter);
 
-router.use("/topics", topicsRouter);
+router.use("/preferredTopics", topicsRouter);
 
 router.use("/CDN", CDNRouter);
 

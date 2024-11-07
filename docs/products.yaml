@@ -105,7 +105,7 @@ components:
                 pages:
                   type: integer
 
-/products/{id}:
+/products/product/{id}:
   get:
     summary: Get a specific product
     tags: [Products]
