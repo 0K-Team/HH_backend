@@ -122,13 +122,9 @@ components:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    type: boolean
+              type: array
+              items:
+                type: boolean
       500:
         description: Server error
                 
