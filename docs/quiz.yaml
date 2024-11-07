@@ -122,9 +122,21 @@ components:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                type: boolean
+              type: object
+              properties:
+                answers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      isCorrect:
+                        type: boolean
+                percentage:
+                  type: number
+                pointsAwarded:
+                  type: number
       500:
         description: Server error
                 

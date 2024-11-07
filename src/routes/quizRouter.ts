@@ -3,7 +3,8 @@ import QuizSchema from "../schemas/quizzes";
 import { validateParams, validateQuery } from "../middlewares/validate";
 import { ObjectIdValidatorParams, QuizValidator } from "../validators";
 import Joi from "joi";
-import { ObjectId } from "mongoose";
+import AccountsSchema from "../schemas/accounts";
+import passport from "passport";
 
 const router = Router();
 
@@ -38,14 +39,34 @@ router.get("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => 
     }
 })
 
-router.post("/submit", validateQuery(QuizValidator), async (req, res) => {
+router.post("/submit", passport.authenticate("jwt", { session: false} ), validateQuery(QuizValidator), async (req, res) => {
     const { _id, answers } = req.body;
     const quiz = await QuizSchema.findById(_id).exec();
 
-    const result = answers.map(((e: { answer: string | null | undefined; id: number; }) => {
+    const correct = answers.map(((e: { answer: string | null | undefined; id: number; }) => {
         const question = quiz?.questions?.[`${e.id}`];
-        return question?.correct_answer === e.answer;
+        return [e.id, question?.correct_answer === e.answer];
     }));
+
+    const correctAnswers = correct.filter(Boolean).length;
+    const percentage = correctAnswers / correct.length;
+
+    const points = percentage * (quiz?.points_reward ?? 0); 
+    // @ts-ignore
+    AccountsSchema.findOneAndUpdate(
+        {
+            // @ts-ignore
+            id: req.user.id
+        }, {
+            $inc: {points: points}
+        }, { new: true }
+    ).exec();
+    
+    const result = JSON.stringify({
+        answers: correct.map(([id, isCorrect]: [number, boolean]) => ({ id, isCorrect })),
+        percentage: percentage,
+        pointsAwarded: points
+    });
 
     res.status(200).send(result);
 })
