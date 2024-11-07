@@ -47,7 +47,7 @@ components:
     ReturnedEvent:
       type: object
       allOf:
-        - $ref: '#/components/Event'
+        - $ref: '#/components/schemas/Event'
         - type: object
           properties:
             members:
