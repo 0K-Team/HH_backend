@@ -5,7 +5,7 @@ import TopicSchema from "../../schemas/topics";
 
 const router = Router();
 
-router.post("/", validateBody(Joi.object({ topic: Joi.string().required().max(30) })), async (req, res) => {
+router.post("/", validateBody(Joi.object({ topic: Joi.string().required().max(60) })), async (req, res) => {
     const { topic } = req.body;
 
     const result = TopicSchema.create({
@@ -15,7 +15,7 @@ router.post("/", validateBody(Joi.object({ topic: Joi.string().required().max(30
     res.send(result);
 })
 
-router.post("/bulk", validateBody(Joi.object({ topics: Joi.array().items(Joi.string().max(30)).required() })), async (req, res) => {
+router.post("/bulk", validateBody(Joi.object({ topics: Joi.array().items(Joi.string().max(60)).required() })), async (req, res) => {
     const { topics } = req.body;
     const result = await TopicSchema.create(topics.map((a: string) => ({ name: a })));
 
