@@ -178,7 +178,7 @@ export const DiscountValidator = Joi.object({
 export const QuizValidator = Joi.object({
     _id: ObjectIdValidator,
     answers: Joi.array().items(Joi.object().keys({
-        id: ObjectIdValidator,
-        answer: Joi.string().min(1).max(1).pattern(/[A-D]/).required(),
+        id: Joi.string().max(2).pattern(/^[0-9]{1,2}$/),
+        answer: Joi.string().length(1).pattern(/^[A-D]$/).required(),
     }))
 })
