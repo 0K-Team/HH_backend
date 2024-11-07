@@ -1,7 +1,7 @@
 import { Router } from "express";
 import PostSchema from "../schemas/posts";
 import AccountSchema from "../schemas/accounts";
-import passport from "passport";
+import user from "../middlewares/user";
 import { ObjectIdValidatorParams, PostValidator } from "../validators";
 import { validateParams, validateQuery, validateBody } from "../middlewares/validate";
 import Joi from "joi";
@@ -52,7 +52,7 @@ router.post("/", validateBody(Joi.object({
     content: Joi.string().min(1).max(300).required(),
     images: Joi.array().items(Joi.string()),
     tags: Joi.array().items(Joi.string().max(64))
-})), passport.authenticate("jwt", { session: false }), async (req, res) => {
+})), user(), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.sendStatus(401), undefined;
     const {
@@ -69,7 +69,7 @@ router.post("/", validateBody(Joi.object({
     res.send(post);
 });
 
-router.delete("/:id", validateParams(ObjectIdValidatorParams), passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.delete("/:id", validateParams(ObjectIdValidatorParams), user(), async (req, res) => {
     const { id } = req.params;
 
     const post = await PostSchema.findById(id);
@@ -93,7 +93,7 @@ router.put("/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.obj
     content: Joi.string().min(1).max(300).required(),
     tags: Joi.array().items(Joi.string().min(1).max(64)),
     images: Joi.array().items(Joi.string())
-})), passport.authenticate("jwt", { session: false }), async (req, res) => {
+})), user(), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.sendStatus(401), undefined;
 
@@ -113,7 +113,7 @@ router.put("/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.obj
     res.send(newPost);
 })
 
-router.post("/like/:id", validateParams(ObjectIdValidatorParams), passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post("/like/:id", validateParams(ObjectIdValidatorParams), user(), async (req, res) => {
     const { id } = req.params;
     
     const post = await PostSchema.findByIdAndUpdate(id, {
@@ -126,7 +126,7 @@ router.post("/like/:id", validateParams(ObjectIdValidatorParams), passport.authe
     res.status(200).send(post);
 })
 
-router.delete("/like/:id", validateParams(ObjectIdValidatorParams), passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.delete("/like/:id", validateParams(ObjectIdValidatorParams), user(), async (req, res) => {
     const { id } = req.params;
     
     const post = await PostSchema.findByIdAndUpdate(id, {

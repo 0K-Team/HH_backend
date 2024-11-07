@@ -1,6 +1,6 @@
 import { Router } from "express";
 import GardenSchema from "../schemas/garden";
-import passport from "passport";
+import user from "../middlewares/user";
 import { GardenHandler } from "../handlers/GardenHandler";
 import { validateBody, validateParams, validateQuery } from "../middlewares/validate";
 import { ObjectIdValidatorParams, UserIdValidator } from "../validators";
@@ -8,7 +8,7 @@ import Joi from "joi";
 
 const router = Router();
 
-router.get("/me", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.get("/me", user(), async (req, res) => {
     const garden = await GardenSchema.findOneAndUpdate({
         // @ts-ignore
         user: req.user.id
@@ -70,7 +70,7 @@ router.get("/top", validateQuery(Joi.object({
     })
 })
 
-router.post("/me/action/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.object({ action: Joi.string().valid("water", "fertilizer", "weeds") })), passport.authenticate("jwt", { session: false }), async (req, res) => {    
+router.post("/me/action/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.object({ action: Joi.string().valid("water", "fertilizer", "weeds") })), user(), async (req, res) => {    
     const { id } = req.params;
     const { action } = req.body;
     // @ts-ignore

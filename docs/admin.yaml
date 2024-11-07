@@ -231,3 +231,103 @@ tags:
               $ref: "../products.yaml#/components/schemas/Discount"
       404:
         description: Discount not found
+
+/admin/events:
+  get:
+    tags: [Admin]
+    summary: Get all events awaiting approval
+    responses:
+      200:
+        description: Events
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "./events.yaml#/components/schemas/ReturnedEvent"
+
+/admin/events/{id}:
+  patch:
+    tags: [Admin]
+    summary: Update event
+    parameters:
+      - in: path
+        name: id
+        description: Event ID
+        schema:
+          type: string
+    requestBody:
+      required: true
+      description: All fields are optional
+      content:
+        application/json:
+          schema:
+            $ref: './events.yaml#/components/schemas/Event'
+    responses:
+      200:
+        description: Updated event
+        content:
+          application/json:
+            schema:
+              $ref: './events.yaml#/components/schemas/ReturnedEvent'
+      404:
+        description: Event not found
+  delete:
+    tags: [Admin]
+    summary: Delete event
+    parameters:
+      - in: path
+        name: id
+        description: Event ID
+        schema:
+          type: string
+    responses:
+      200:
+        description: Deleted event
+        content:
+          application/json:
+            schema:
+              $ref: './events.yaml#/components/schemas/ReturnedEvent'
+      404:
+        description: Event not found
+
+/admin/events/approve/{id}:
+  post:
+    tags: [Admin]
+    summary: Approves an awaiting event
+    parameters:
+      - in: path
+        name: id
+        description: Event ID
+        schema:
+          type: string
+    responses:
+      200:
+        description: Event succesfully approved
+        content:
+          application/json:
+            schema:
+              $ref: './events.yaml#/components/schemas/ReturnedEvent'
+      400:
+        description: Event not awaiting approval
+      404:
+        description: Event not found
+  delete:
+    tags: [Admin]
+    summary: Reject an awaiting event
+    parameters:
+      - in: path
+        name: id
+        description: Event ID
+        schema:
+          type: string
+    responses:
+      200:
+        description: Event succesfully rejected
+        content:
+          application/json:
+            schema:
+              $ref: './events.yaml#/components/schemas/ReturnedEvent'
+      400:
+        description: Event not awaiting approval
+      404:
+        description: Event not found
