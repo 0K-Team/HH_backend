@@ -4,6 +4,7 @@ import CDNRouter from "./CDN";
 import topics from "./preferredTopics";
 import products from "./products";
 import events from "./events";
+import plants from "./plants";
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use("/CDN", CDNRouter);
 router.use("/preferredTopics", topics);
 router.use("/products", products);
 router.use("/events", events);
+router.use("/plants", plants);
 
 export default router;

@@ -1,5 +1,7 @@
 import { Router } from "express";
 import GardenSchema from "../schemas/garden";
+import PlantSchema from "../schemas/plants";
+import AccountSchema from "../schemas/accounts";
 import user from "../middlewares/user";
 import { GardenHandler } from "../handlers/GardenHandler";
 import { validateBody, validateParams, validateQuery } from "../middlewares/validate";
@@ -26,7 +28,7 @@ router.get("/user/:id", validateParams(Joi.object({ id: UserIdValidator })), asy
 
     if (!garden) res.sendStatus(404);
     else res.send(garden);
-})
+});
 
 router.get("/top", validateQuery(Joi.object({
     page: Joi.number(),
@@ -68,6 +70,12 @@ router.get("/top", validateQuery(Joi.object({
         total,
         pages
     })
+});
+
+router.get("/plants", async (_, res) => {
+    const plants = await PlantSchema.find();
+
+    res.send(plants);
 })
 
 router.post("/me/action/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.object({ action: Joi.string().valid("water", "fertilizer", "weeds") })), user(), async (req, res) => {    
@@ -102,6 +110,51 @@ router.post("/me/action/:id", validateParams(ObjectIdValidatorParams), validateB
     }
 
     res.send(actionRes[1]);
+});
+
+router.post("/me/sell/:id", validateParams(ObjectIdValidatorParams), user(), async (req, res) => {
+    const { id } = req.params;
+    // @ts-ignore
+    const user = req.user.id;
+
+    const garden = await GardenSchema.findOne({
+        user,
+        "plants._id": id
+    }, {
+        "plants.$": 1
+    });
+
+    const currentPlant = garden ? garden.plants[0] : null;
+
+    if (!currentPlant) return res.sendStatus(404), undefined;
+
+    const plant = await PlantSchema.findOne({
+        type: currentPlant.type
+    });
+
+    if (!plant) return res.sendStatus(400), undefined;
+
+    const price = plant.price * (currentPlant.growthStage / 4);
+    
+    await AccountSchema.updateOne({
+        id: user
+    }, {
+        $inc: {
+            points: price
+        }
+    });
+
+    const newGarden = await GardenSchema.findOneAndUpdate({
+        user
+    }, {
+        $pull: {
+            plants: currentPlant
+        }
+    }, {
+        new: true
+    });
+
+    res.send(newGarden);
 })
 
 export default router;

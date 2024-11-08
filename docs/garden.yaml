@@ -169,3 +169,24 @@ components:
                       score:
                         type: number
                         description: 'Score of the garden calculated using following formula: # of plants * sum of plant growth states'
+
+/garden/plants:
+  get:
+    tags: [Garden]
+    summary: Get all available plants
+    responses:
+      200:
+        description: Available plants
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  type:
+                    type: string
+                  price:
+                    type: number

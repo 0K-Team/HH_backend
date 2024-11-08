@@ -243,7 +243,7 @@ tags:
           application/json:
             schema:
               type: object
-              $ref: "./events.yaml#/components/schemas/ReturnedEvent"
+              $ref: "events.yaml#/components/schemas/ReturnedEvent"
 
 /admin/events/{id}:
   patch:
@@ -261,14 +261,14 @@ tags:
       content:
         application/json:
           schema:
-            $ref: './events.yaml#/components/schemas/Event'
+            $ref: 'events.yaml#/components/schemas/Event'
     responses:
       200:
         description: Updated event
         content:
           application/json:
             schema:
-              $ref: './events.yaml#/components/schemas/ReturnedEvent'
+              $ref: 'events.yaml#/components/schemas/ReturnedEvent'
       404:
         description: Event not found
   delete:
@@ -286,7 +286,7 @@ tags:
         content:
           application/json:
             schema:
-              $ref: './events.yaml#/components/schemas/ReturnedEvent'
+              $ref: 'events.yaml#/components/schemas/ReturnedEvent'
       404:
         description: Event not found
 
@@ -306,7 +306,7 @@ tags:
         content:
           application/json:
             schema:
-              $ref: './events.yaml#/components/schemas/ReturnedEvent'
+              $ref: 'events.yaml#/components/schemas/ReturnedEvent'
       400:
         description: Event not awaiting approval
       404:
@@ -326,8 +326,40 @@ tags:
         content:
           application/json:
             schema:
-              $ref: './events.yaml#/components/schemas/ReturnedEvent'
+              $ref: 'events.yaml#/components/schemas/ReturnedEvent'
       400:
         description: Event not awaiting approval
       404:
         description: Event not found
+
+/admin/plants:
+  post:
+    tags: [Admin]
+    summary: Add a new plant type
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+              price:
+                type: number
+    responses:
+      200:
+        description: Added succesfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                price:
+                  type: number
