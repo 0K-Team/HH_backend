@@ -1,0 +1,118 @@
+tags:
+  name: Calculator
+
+components:
+  schemas:
+    Req:
+      type: object
+      required:
+        - transport
+        - energy
+        - water
+        - waste
+        - food
+        - leisure
+      properties:
+        transport:
+          type: object
+          properties:
+            car_usage:
+              type: integer
+            fuel_type:
+              type: integer
+            weekly_km:
+              type: integer
+            flight_frequency:
+              type: integer
+            public_transport_usage:
+              type: integer
+        energy:
+          type: object
+          properties:
+            energy_source:
+              type: integer
+            water_heating_source:
+              type: integer
+            monthly_kWh:
+              type: integer
+            energy_efficiency:
+              type: integer
+        water:
+          type: object
+          properties:
+            shower_time:
+              type: integer
+            bathtub_usage:
+              type: integer
+        waste:
+          type: object
+          properties:
+            waste_segregation:
+              type: integer
+            food_waste:
+              type: integer
+            plastic_usage:
+              type: integer
+        food:
+          type: object
+          properties:
+            meat_consumption:
+              type: integer
+            local_food_preference:
+              type: integer
+        leisure:
+          type: object
+          properties:
+            movie_watch_time:
+              type: integer
+            shopping_frequency:
+              type: integer
+    Res:
+      type: object
+      properties:
+        total_emission_week:
+          type: number
+          description: The total emission for the week
+        specific_emission:
+          type: object
+          properties:
+            car:
+              type: number
+            plane:
+              type: number
+            public_transport:
+              type: number
+            energy:
+              type: number
+            water:
+              type: number
+            garbage:
+              type: number
+            food:
+              type: number
+            watch_time:
+              type: number
+            shopping:
+              type: number
+        AI_suggestion:
+          type: string
+          description: Suggestions from AI to reduce emissions
+
+/calc:
+  post:
+    summary: Sends habits to calculator that responds with calculated CO2 emission and AI suggestion on how to improve
+    tags: [Calculator]
+    security:
+        - bearerAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Req'
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Res'

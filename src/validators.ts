@@ -182,3 +182,36 @@ export const QuizValidator = Joi.object({
         answer: Joi.string().length(1).pattern(/^[A-D]$/).required(),
     }))
 })
+
+export const CalculatorValidator = Joi.object({
+    transport: Joi.object({
+        car_usage: Joi.number().min(0).max(3),
+        fuel_type: Joi.number().min(0).max(4),
+        weekly_km: Joi.number().min(0).max(3),
+        flight_frequency: Joi.number().min(0).max(3),
+        public_transport_usage: Joi.number().min(0).max(3)
+    }),
+    energy: Joi.object({
+        energy_source: Joi.number().min(0).max(3),
+        water_heating_source: Joi.number().min(0).max(3),
+        monthly_kWh: Joi.number().min(0).max(3),
+        energy_efficiency: Joi.number().min(0).max(2)
+    }),
+    water: Joi.object({
+        shower_time: Joi.number().min(0).max(3),
+        bathtub_usage: Joi.number().min(0).max(3)
+    }),
+    waste: Joi.object({
+        waste_segregation: Joi.number().min(0).max(2),
+        food_waste: Joi.number().min(0).max(3),
+        plastic_usage: Joi.number().min(0).max(3)
+    }),
+    food: Joi.object({
+        meat_consumption: Joi.number().min(0).max(4),
+        local_food_preference: Joi.number().min(0).max(3)
+    }),
+    leisure: Joi.object({
+        movie_watch_time: Joi.number().min(0).max(3),
+        shopping_frequency: Joi.number().min(0).max(3)
+    })
+}).options({ stripUnknown: true });

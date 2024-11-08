@@ -12,6 +12,7 @@ import quizRouter from "./quizRouter";
 import gardenRouter from "./gardenRouter";
 import productsRouter from "./productsRouter";
 import topicsRouter from "./preferredTopicsRouter";
+import calculatorRouter from "./calculatorRouter";
 
 const router = Router();
 
@@ -25,6 +26,7 @@ router.use("/posts", postsRouter);
 router.use("/quizzes", quizRouter);
 router.use("/garden", gardenRouter);
 router.use("/products", productsRouter);
+router.use("/calc", calculatorRouter)
 
 router.use("/preferredTopics", topicsRouter);
 
