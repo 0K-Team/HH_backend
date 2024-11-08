@@ -18,7 +18,7 @@ components:
           items:
             type: object
             properties:
-              text:
+              question:
                 type: string
                 description: The text of the question
               answers:

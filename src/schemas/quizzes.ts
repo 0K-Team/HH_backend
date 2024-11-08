@@ -8,7 +8,7 @@ const quizSchema = new Schema({
     description: String,
     questions: [
         {
-            text: {
+            quesition: {
                 type: String,
                 required: true
             },
