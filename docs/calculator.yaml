@@ -102,8 +102,6 @@ components:
   post:
     summary: Sends habits to calculator that responds with calculated CO2 emission and AI suggestion on how to improve
     tags: [Calculator]
-    security:
-        - bearerAuth: []
     requestBody:
       content:
         application/json:
