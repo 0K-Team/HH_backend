@@ -1,0 +1,194 @@
+tags:
+  name: Events
+  description: Event management
+
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        title:
+          type: string
+          required: true
+        description:
+          type: string
+        category:
+          type: string
+          required: true
+        isOffline:
+          type: boolean
+        location:
+          type: object
+          properties:
+            address:
+              type: string
+            latitude:
+              type: number
+            longitude:
+              type: number
+        date:
+          type: string
+          format: date
+        duration:
+          type: string
+        organizer:
+          type: string
+          description: User ID
+          required: true
+        image:
+          type: string
+        additionalInfo:
+          type: object
+          properties:
+            whatToBring:
+              type: string
+            eventRules:
+              type: string
+    ReturnedEvent:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Event'
+        - type: object
+          properties:
+            members:
+              type: array
+              items:
+                schema:
+                  type: string
+              description: Members that joined this event
+            awaiting:
+              type: boolean
+              description: Whether the event is awaiting approval
+
+/events:
+  get:
+    tags: [Events]
+    summary: Get all events
+    responses:
+      200:
+        description: All events
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnedEvent'
+  post:
+    tags: [Events]
+    summary: Send a new request for approval
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Event'
+    responses:
+      200:
+        description: Created event
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnedEvent'
+
+/events/{id}:
+  get:
+    tags: [Events]
+    summary: Get a specific event
+    parameters:
+      - in: path
+        name: id
+        description: Event ID
+        schema:
+          type: string
+    responses:
+      200:
+        description: Found event
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnedEvent'
+      404:
+        description: Event not found
+  patch:
+    tags: [Events]
+    summary: Update event (authorized user needs to be the event organizer to use this endpoint)
+    parameters:
+      - in: path
+        name: id
+        description: Event ID
+        schema:
+          type: string
+    requestBody:
+      required: true
+      description: All fields are optional
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Event'
+    responses:
+      200:
+        description: Updated event
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnedEvent'
+      403:
+        description: User is not organizer
+      404:
+        description: Event not found
+  delete:
+    tags: [Events]
+    summary: Delete event (authorized user needs to be the event organizer to use this endpoint)
+    parameters:
+      - in: path
+        name: id
+        description: Event ID
+        schema:
+          type: string
+    responses:
+      200:
+        description: Deleted event
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnedEvent'
+      403:
+        description: User is not organizer
+      404:
+        description: Event not found
+
+/events/{id}/members/me:
+  post:
+    tags: [Events]
+    summary: Join an event
+    parameters:
+      - in: path
+        name: id
+        description: Event ID
+        schema:
+          type: string
+    responses:
+      200:
+        description: Event the user joined
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnedEvent'
+      404:
+        description: Event not found
+  delete:
+    tags: [Events]
+    summary: Leave an event
+    parameters:
+      - in: path
+        name: id
+        description: Event ID
+        schema:
+          type: string
+    responses:
+      200:
+        description: Event the user left
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnedEvent'
+      404:
+        description: Event not found

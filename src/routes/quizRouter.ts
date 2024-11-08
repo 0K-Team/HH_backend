@@ -4,7 +4,7 @@ import { validateParams, validateQuery } from "../middlewares/validate";
 import { ObjectIdValidatorParams, QuizValidator } from "../validators";
 import Joi from "joi";
 import AccountsSchema from "../schemas/accounts";
-import passport from "passport";
+import user from "../middlewares/user";
 
 const router = Router();
 
@@ -39,7 +39,7 @@ router.get("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => 
     }
 })
 
-router.post("/submit", passport.authenticate("jwt", { session: false} ), validateQuery(QuizValidator), async (req, res) => {
+router.post("/submit", user(), validateQuery(QuizValidator), async (req, res) => {
     const { _id, answers } = req.body;
     const quiz = await QuizSchema.findById(_id).exec();
 

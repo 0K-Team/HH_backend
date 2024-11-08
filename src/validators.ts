@@ -173,7 +173,7 @@ export const DiscountValidator = Joi.object({
     productRestrictions: Joi.string().allow(""),
     termsAndConditions: Joi.string().allow(""),
     url: Joi.string().allow("")
-})
+});
 
 export const QuizValidator = Joi.object({
     _id: ObjectIdValidator,
@@ -181,6 +181,36 @@ export const QuizValidator = Joi.object({
         id: Joi.string().max(2).pattern(/^[0-9]{1,2}$/),
         answer: Joi.string().length(1).pattern(/^[A-D]$/).required(),
     }))
+});
+
+export const EventValidator = Joi.object({
+    title: Joi
+        .string()
+        .max(100)
+        .required(),
+    description: Joi.string(),
+    category: Joi
+        .string()
+        .max(130)
+        .required(),
+    isOffline: Joi.boolean(),
+    location: Joi.object({
+        address: Joi.string(),
+        latitude: Joi.number(),
+        longitude: Joi.number()
+    }),
+    date: Joi.date(),
+    duration: Joi.string().max(10),
+    image: Joi.string(),
+    additionalInfo: Joi.object({
+        whatToBring: Joi.string(),
+        eventRules: Joi.string()
+    })
+});
+
+export const EventValidatorEdit = EventValidator.append({
+    title: Joi.string().max(100),
+    category: Joi.string().max(130)
 })
 
 export const CalculatorValidator = Joi.object({
