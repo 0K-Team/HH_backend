@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@azure/communication-email": "^1.0.0",
     "@azure/storage-blob": "^12.25.0",
     "@eslint/js": "^9.14.0",
     "@types/cookie-parser": "^1.4.7",
