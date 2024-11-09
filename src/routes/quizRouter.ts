@@ -5,8 +5,12 @@ import { ObjectIdValidatorParams, QuizValidator } from "../validators";
 import Joi from "joi";
 import AccountsSchema from "../schemas/accounts";
 import user from "../middlewares/user";
+import { CacheHandler } from "../handlers/CacheHandler";
+import { Quiz } from "../types/quiz";
+import { cache } from "../middlewares/cache";
 
 const router = Router();
+const quizCache = new CacheHandler<Quiz>();
 
 router.get("/", validateQuery(Joi.object({ category: Joi.string() })), async (req, res) => {
     const { category } = req.query;
@@ -27,7 +31,7 @@ router.get("/", validateQuery(Joi.object({ category: Joi.string() })), async (re
     }
 })
 
-router.get("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => {
+router.get("/:id", cache(quizCache), validateParams(ObjectIdValidatorParams), async (req, res) => {
     try {
         const result = await QuizSchema.findById(req.params.id, {
             "questions.correct_answer": 0,

@@ -37,12 +37,6 @@ const accountSchema = new Schema({
         sparse: true
     },
     title: String,
-    notifications: [
-        {
-            title: String,
-            date: Date
-        }
-    ],
     friends: [String],
     bio: String,
     achievements: [

@@ -4,14 +4,18 @@ import { UserIdValidator } from "../../validators";
 import Joi from "joi";
 import { validateBody, validateParams } from "../../middlewares/validate";
 import { COUNTRY_CODES } from "../../constants";
+import { CacheHandler } from "../../handlers/CacheHandler";
+import { User } from "../../types/user";
+import { cache } from "../../middlewares/cache";
 
 const router = Router();
+const userCache = new CacheHandler<User>();
 
 router.get("/me", (req, res) => {
     res.send(req.user);
-})
+});
 
-router.get("/:id", validateParams(Joi.object({ id: UserIdValidator })), async (req, res) => {
+router.get("/:id", cache(userCache), validateParams(Joi.object({ id: UserIdValidator })), async (req, res) => {
     const { id } = req.params;
     
     const user = await AccountData.findOne({
@@ -21,7 +25,7 @@ router.get("/:id", validateParams(Joi.object({ id: UserIdValidator })), async (r
     if (!user) return res.sendStatus(404), undefined;
 
     res.send(user);
-})
+});
 
 router.patch("/me/username", validateBody(Joi.object({ username: Joi.string().required().min(2).max(32) })), async (req, res) => {
     const { username } = req.body;
@@ -37,7 +41,7 @@ router.patch("/me/username", validateBody(Joi.object({ username: Joi.string().re
     } catch (err) {
         res.status(500).send(err);
     }
-})
+});
 
 router.patch("/me/firstName", validateBody(Joi.object({ firstName: Joi.string().max(32).allow("") })), async (req, res) => {
     const { firstName } = req.body;
@@ -53,7 +57,7 @@ router.patch("/me/firstName", validateBody(Joi.object({ firstName: Joi.string().
     } catch (err) {
         res.status(500).send(err);
     }
-})
+});
 
 router.patch("/me/lastName", validateBody(Joi.object({ lastName: Joi.string().max(32).allow("") })), async (req, res) => {
     const { lastName } = req.body;
@@ -69,7 +73,7 @@ router.patch("/me/lastName", validateBody(Joi.object({ lastName: Joi.string().ma
     } catch (err) {
         res.status(500).send(err);
     }
-})
+});
 
 router.patch("/me/bio", validateBody(Joi.object({ bio: Joi.string().required().max(230).allow("") })), async (req, res) => {
     const { bio } = req.body;
@@ -80,7 +84,7 @@ router.patch("/me/bio", validateBody(Joi.object({ bio: Joi.string().required().m
     }, { bio }, { new: true });
 
     res.send(newUser);
-})
+});
 
 router.patch("/me/location", validateBody(Joi.object({ location: Joi.string().required().max(100).allow("") })), async (req, res) => {
     const { location } = req.body;
@@ -91,7 +95,7 @@ router.patch("/me/location", validateBody(Joi.object({ location: Joi.string().re
     }, { location }, { new: true });
 
     res.send(newUser);
-})
+});
 
 router.patch("/me/country", validateBody(Joi.object({ country: Joi.string().valid(...Object.keys(COUNTRY_CODES)) })), async (req, res) => {
     const { country } = req.body;
@@ -130,7 +134,7 @@ router.delete("/me/preferredTopics/:topic", validateParams(Joi.object({ topic: J
     }, { new: true });
 
     res.send(response);
-})
+});
 
 router.post("/me/configure", validateBody(Joi.object({
     username: Joi.string().min(2).max(32),
@@ -168,23 +172,7 @@ router.post("/me/configure", validateBody(Joi.object({
     });
 
     res.send(user);
-})
-
-router.post("/me/achievement", validateBody(Joi.object({ achievement: Joi.string().required().max(30) })), async (req, res) => {
-    const { achievement } = req.body;
-
-    const user = await AccountData.findOneAndUpdate({
-        // @ts-ignore
-        id: req.user.id
-    }, { 
-        $push: { achievements: {
-            name: achievement,
-            date_awarded: new Date()
-        }},
-    }, { new: true });
-
-    res.send(user);
-})
+});
 
 router.post("/me/skill", validateBody(Joi.object({ skill: Joi.string().required().max(20) })), async (req, res) => {
     const { skill } = await req.body;
@@ -197,7 +185,7 @@ router.post("/me/skill", validateBody(Joi.object({ skill: Joi.string().required(
     }, { new: true });
 
     res.send(user);
-})
+});
 
 router.delete("/me/skill", validateBody(Joi.object({ skill: Joi.string().required().max(20) })), async (req, res) => {
     const { skill } = await req.body;
@@ -210,7 +198,7 @@ router.delete("/me/skill", validateBody(Joi.object({ skill: Joi.string().require
     }, { new: true });
 
     res.send(user);
-})
+});
 
 router.patch("/me/title", validateBody(Joi.object({ title: Joi.string().required().max(20) })), async (req, res) => {
     const { title } = await req.body;
@@ -223,6 +211,6 @@ router.patch("/me/title", validateBody(Joi.object({ title: Joi.string().required
     }, { new: true });
 
     res.send(user);
-})
+});
 
 export default router;
