@@ -28,6 +28,7 @@
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "cron": "^3.1.9",
     "dotenv": "^16.4.5",
     "eslint": "^9.14.0",
     "express": "^4.21.1",

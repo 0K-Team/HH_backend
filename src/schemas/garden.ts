@@ -22,11 +22,15 @@ const gardenSchema = new Schema({
             },
             wateringNeeded: {
                 type: Number,
-                default: 0
+                default: () => Math.floor(Math.random() * 4)
             },
             fertilizerNeeded: {
                 type: Number,
-                default: 0
+                default: () => Math.floor(Math.random() * 4)
+            },
+            weedsRemovedNeeded: {
+                type: Number,
+                default: () => Math.floor(Math.random() * 4)
             },
             planted: {
                 type: Date,
@@ -35,10 +39,6 @@ const gardenSchema = new Schema({
             lastWatered: Date,
             lastFertilized: Date,
             harvestable: Boolean,
-            weedsRemovedNeeded: {
-                type: Number,
-                default: 0
-            }
         }
     ],
     userActions: {
@@ -69,7 +69,8 @@ const gardenSchema = new Schema({
             default: 10,
         },
         weedsRefill: Date
-    }
+    },
+    lastPlantAdded: Date
 });
 
 export default model("garden", gardenSchema);
