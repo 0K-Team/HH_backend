@@ -4,6 +4,7 @@ export interface Notification {
     name: string;
     description?: string;
     icon?: string;
+    read?: boolean;
 }
 
 export class NotificationHandler {

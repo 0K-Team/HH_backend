@@ -20,15 +20,17 @@ router.get("/", async (req, res) => {
 router.delete("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => {
     const notifs = await NotificationSchema.findOneAndUpdate({
         // @ts-ignore
-        user: req.user.id
+        user: req.user.id,
+        "notifications._id": req.params.id
     }, {
-        $pull: {
-            notifications: { _id: req.params.id }
+        $set: {
+            "notifications.$.read": true
         }
     }, {
-        new: true,
-        upsert: true
+        new: true
     });
+
+    if (!notifs) return res.sendStatus(404), undefined;
 
     res.send(notifs);
 });

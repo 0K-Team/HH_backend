@@ -13,7 +13,8 @@ const schema = new Schema({
                     required: true
                 },
                 description: String,
-                icon: String
+                icon: String,
+                read: Boolean
             }
         ],
         default: []

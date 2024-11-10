@@ -482,3 +482,43 @@ components:
     responses:
       200:
         description: Theme succesfully updated
+
+/user/notifications:
+  get:
+    tags: [User]
+    summary: Get all notifications
+    responses:
+      200:
+        description: Notifications
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  icon:
+                    type: string
+                  read:
+                    type: boolean
+
+/user/notifications/{id}:
+  delete:
+    tags: [User]
+    summary: Mark notification as read
+    parameters:
+      - name: id
+        in: path
+        description: Notification ID
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Updated
+      404:
+        description: Not found
