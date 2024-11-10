@@ -5,15 +5,22 @@ import user from "../middlewares/user";
 import { ObjectIdValidatorParams, PostValidator } from "../validators";
 import { validateParams, validateQuery, validateBody } from "../middlewares/validate";
 import Joi from "joi";
+import { cache, cacheDestroy, cacheRemove } from "../middlewares/cache";
+import { CacheHandler } from "../handlers/CacheHandler";
 
 const router = Router();
+
+const postCache = new CacheHandler();
+const postPagesCache = new CacheHandler();
 
 router.get("/", validateQuery(Joi.object({
     user: Joi.string().pattern(/^[0-9]{15}$/).length(15),
     tag: Joi.string(),
     page: Joi.number(),
     limit: Joi.number()
-})), async (req, res) => {
+})), cache(postPagesCache, (req) => {
+    return `${req.query.page ?? 1}-${req.query.limit ?? 10}-${req.query.user ?? ""}-${req.query.tag ?? ""}`
+}), async (req, res) => {
     const { user, tag } = req.query;
 
     const page = parseInt(req.query.page as string) || 1; 
@@ -40,7 +47,7 @@ router.get("/", validateQuery(Joi.object({
     });
 });
 
-router.get("/:id", validateParams(ObjectIdValidatorParams), async (req, res) => {
+router.get("/:id", validateParams(ObjectIdValidatorParams), cache(postCache), async (req, res) => {
     const { id } = req.params;
     const post = await PostSchema.findById(id);
 
@@ -52,7 +59,7 @@ router.post("/", validateBody(Joi.object({
     content: Joi.string().min(1).max(300).required(),
     images: Joi.array().items(Joi.string()),
     tags: Joi.array().items(Joi.string().max(64))
-})), user(), async (req, res) => {
+})), cacheDestroy(postPagesCache), user(), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.sendStatus(401), undefined;
     const {
@@ -69,7 +76,7 @@ router.post("/", validateBody(Joi.object({
     res.send(post);
 });
 
-router.delete("/:id", validateParams(ObjectIdValidatorParams), user(), async (req, res) => {
+router.delete("/:id", validateParams(ObjectIdValidatorParams), cacheDestroy(postPagesCache), cacheRemove(postCache), user(), async (req, res) => {
     const { id } = req.params;
 
     const post = await PostSchema.findById(id);
@@ -87,13 +94,13 @@ router.delete("/:id", validateParams(ObjectIdValidatorParams), user(), async (re
    
     await PostSchema.findByIdAndDelete(id);
     res.sendStatus(200);
-})
+});
 
 router.put("/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.object({
     content: Joi.string().min(1).max(300).required(),
     tags: Joi.array().items(Joi.string().min(1).max(64)),
     images: Joi.array().items(Joi.string())
-})), user(), async (req, res) => {
+})), cacheDestroy(postPagesCache), cache(postCache, undefined, undefined, true), user(), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.sendStatus(401), undefined;
 
@@ -111,9 +118,9 @@ router.put("/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.obj
     
     const newPost = await PostSchema.findByIdAndUpdate(id, validated.value);
     res.send(newPost);
-})
+});
 
-router.post("/like/:id", validateParams(ObjectIdValidatorParams), user(), async (req, res) => {
+router.post("/like/:id", validateParams(ObjectIdValidatorParams), cache(postCache, undefined, undefined, true), user(), async (req, res) => {
     const { id } = req.params;
     
     const post = await PostSchema.findByIdAndUpdate(id, {
@@ -124,9 +131,9 @@ router.post("/like/:id", validateParams(ObjectIdValidatorParams), user(), async 
     }, { new: true })
 
     res.status(200).send(post);
-})
+});
 
-router.delete("/like/:id", validateParams(ObjectIdValidatorParams), user(), async (req, res) => {
+router.delete("/like/:id", validateParams(ObjectIdValidatorParams), cache(postCache, undefined, undefined, true), user(), async (req, res) => {
     const { id } = req.params;
     
     const post = await PostSchema.findByIdAndUpdate(id, {
@@ -137,6 +144,6 @@ router.delete("/like/:id", validateParams(ObjectIdValidatorParams), user(), asyn
     }, { new: true })
 
     res.status(200).send(post);
-})
+});
 
 export default router;

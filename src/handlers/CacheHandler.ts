@@ -13,8 +13,9 @@ export class CacheHandler<T> {
         return this.map.get(key);
     }
 
-    drop(key: string) {
-        this.map.delete(key);
+    drop(key?: string) {
+        if (!key) this.map = new Map();
+        else this.map.delete(key);
     }
 
     has(key: string) {
