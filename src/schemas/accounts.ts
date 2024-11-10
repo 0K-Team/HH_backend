@@ -42,7 +42,10 @@ const accountSchema = new Schema({
     achievements: [
         {
             name: String,
-            date_awarded: Date
+            dateAwarded: Date,
+            description: String,
+            icon: String,
+            id: String
         }
     ],
     skills: [String],
