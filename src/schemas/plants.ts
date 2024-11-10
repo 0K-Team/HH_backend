@@ -12,7 +12,8 @@ const schema = new Schema({
     price: {
         type: Number,
         default: 0
-    }
+    },
+    description: String
 });
 
 export default model("plant", schema);
