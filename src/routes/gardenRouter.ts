@@ -22,12 +22,11 @@ router.get("/me", user(), async (req, res) => {
 router.get("/user/:id", validateParams(Joi.object({ id: UserIdValidator })), async (req, res) => {
     const { id } = req.params;
 
-    const garden = await GardenSchema.findOne({
+    const garden = await GardenSchema.findOneAndUpdate({
         user: id
-    });
+    }, { }, { upsert: true, new: true });
 
-    if (!garden) res.sendStatus(404);
-    else res.send(garden);
+    res.send(garden);
 });
 
 router.get("/top", validateQuery(Joi.object({

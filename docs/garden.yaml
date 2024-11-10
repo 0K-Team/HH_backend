@@ -155,8 +155,6 @@ components:
             schema:
               type: object
               $ref: '#/components/schemas/Garden'
-      404:
-        description: User does not exist or it does not have an associated garden
 
 /garden/top:
   get:
