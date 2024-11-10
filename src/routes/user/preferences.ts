@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     res.send(preferences);
 });
 
-router.post("/language", validateBody(Joi.object({ language: Joi.string().valid(...LANGUAGE_CODES) })), async (req, res) => {
+router.put("/language", validateBody(Joi.object({ language: Joi.string().valid(...LANGUAGE_CODES) })), async (req, res) => {
     const preferences = await UserPreferenceSchema.findOneAndUpdate({
         // @ts-ignore
         user: req.user.id
@@ -29,7 +29,7 @@ router.post("/language", validateBody(Joi.object({ language: Joi.string().valid(
     res.send(preferences);
 });
 
-router.post("/theme", validateBody(Joi.object({ theme: Joi.string().valid("light", "dark") })), async (req, res) => {
+router.put("/theme", validateBody(Joi.object({ theme: Joi.string().valid("light", "dark") })), async (req, res) => {
     const preferences = await UserPreferenceSchema.findOneAndUpdate({
         // @ts-ignore
         user: req.user.id

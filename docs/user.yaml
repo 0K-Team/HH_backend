@@ -417,3 +417,68 @@ components:
         description: Bad request
       500:
         description: Internal server error
+
+/user/me/preferences:
+  get:
+    tags: [User]
+    summary: Gets user preferences
+    responses:
+      200:
+        description: User preferences
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                language:
+                  type: string
+                  enum:
+                    - PL
+                    - EN
+                theme:
+                  type: string
+                  enum:
+                    - light
+                    - dark
+
+/user/me/preferences/language:
+  put:
+    tags: [User]
+    summary: Set user preferred language
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              language:
+                type: string
+                enum: 
+                  - PL
+                  - EN
+    responses:
+      200:
+        description: Language succesfully updated
+
+/user/me/preferences/theme:
+  put:
+    tags: [User]
+    summary: Set user preferred theme
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              theme:
+                type: string
+                enum: 
+                  - light
+                  - dark
+    responses:
+      200:
+        description: Theme succesfully updated
