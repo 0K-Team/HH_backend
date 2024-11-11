@@ -148,17 +148,17 @@ export class GardenHandler {
 
         if (!userActions.wateringRefill) newData.wateringRefill = date;
         else if (userActions.wateringRefill < now) {
-            newData.wateringMaxCount = (userActions.wateringMaxCount ?? 0) + 10;
+            newData.wateringMaxCount = (userActions.wateringCount ?? 0) + 10;
             newData.wateringRefill = date;
         }
         if (!userActions.fertilizingRefill) newData.fertilizingRefill = date;
         else if (userActions.fertilizingRefill < now) {
-            newData.fertilizingMaxCount = (userActions.fertilizingMaxCount ?? 0) + 10;
+            newData.fertilizingMaxCount = (userActions.fertilizingCount ?? 0) + 10;
             newData.fertilizingRefill = date;
         }
         if (!userActions.weedsRefill) newData.weedsRefill = date;
         else if (userActions.weedsRefill < now) {
-            newData.weedsMaxRemoved = (userActions.weedsMaxRemoved ?? 0) + 10;
+            newData.weedsMaxRemoved = (userActions.weedsRemoved ?? 0) + 10;
             newData.weedsRefill = date;
         }
 
