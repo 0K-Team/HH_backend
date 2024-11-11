@@ -6,7 +6,7 @@ dotenv.config();
 const connectionString = process.env.COMMUNICATION_SERVICES_CONNECTION_STRING || "";
 const client = new EmailClient(connectionString);
 
-const sendMail = async (subject: string, html: string, respipient: string) => {
+const sendMail = async (subject: string, html: string, recipient: string) => {
     const emailMessage = {
         senderAddress: "no-reply@ecomail.q1000q.me",
         content: {
@@ -14,7 +14,7 @@ const sendMail = async (subject: string, html: string, respipient: string) => {
             html: html,
         },
         recipients: {
-            to: [{ address: respipient }],
+            to: [{ address: recipient }],
         },
         
     };
@@ -22,7 +22,7 @@ const sendMail = async (subject: string, html: string, respipient: string) => {
     const poller = await client.beginSend(emailMessage);
     const result = await poller.pollUntilDone();
 
-    return(result);
+    return result;
 }
 
 export default sendMail;

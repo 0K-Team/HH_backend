@@ -119,13 +119,16 @@ export const BlogValidator = Joi.object({
     title: Joi
         .string()
         .min(1)
-        .max(64)
+        .max(128)
         .required(),
-    author: UserIdValidator,
+    author: Joi
+        .string()
+        .min(1)
+        .max(128),
     content: Joi
         .string()
         .min(1)
-        .max(1000)
+        .max(3000)
         .required()
 }).options({ stripUnknown: true });
 

@@ -3,6 +3,10 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import AccountSchema from "../schemas/accounts";
 import { sendAccountRegistration } from "../mailer";
+import user from "../middlewares/user";
+import { randomUUID } from "crypto";
+import DeletionTokenSchema from "../schemas/deletionTokens";
+import { deleteUserData } from "../auth/userData";
 
 const router = Router();
 
@@ -63,7 +67,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", { failureRedi
     res.redirect("/dash");
 });
 
-router.post("/facebook/email", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post("/facebook/email", user(), async (req, res) => {
     const { email } = req.body;
 
     await AccountSchema.updateOne({
@@ -74,6 +78,48 @@ router.post("/facebook/email", passport.authenticate("jwt", { session: false }),
         email
     })
 
+    res.sendStatus(200);
+});
+
+router.delete("/me", user(), async (req, res) => {
+    const token = randomUUID();
+    // @ts-ignore
+    const user = req.user.id;
+    const userToken = await DeletionTokenSchema.findOne({
+        user
+    });
+
+    if (userToken) return res.status(409).send("Token already requested"), undefined;
+
+    await DeletionTokenSchema.create({
+        user,
+        token
+    });
+
+    // TODO: implement sending confirmation e-mail
+
+    res.sendStatus(200);
+});
+
+router.delete("/me/token", user(), async (req, res) => {
+    const { token } = req.body;
+    // @ts-ignore
+    const user = req.user.id;
+
+    const data = await DeletionTokenSchema.findOne({
+        token
+    });
+
+    if (!data) return res.sendStatus(404), undefined;
+
+    if (data.user != user) return res.sendStatus(403), undefined;
+
+    await DeletionTokenSchema.deleteOne({
+        token
+    });
+
+    deleteUserData(user);
+    
     res.sendStatus(200);
 })
 

@@ -79,3 +79,34 @@ tags:
         description: Email updated successfully
       401:
         description: Unauthorized
+
+/auth/me:
+  delete:
+    summary: Generate an account deletion e-mail
+    tags: [Auth]
+    responses:
+      200:
+        description: Deletion token generated successfully
+      409:
+        description: Already pending
+
+/auth/me/token:
+  delete:
+    summary: Delete account
+    tags: [Auth]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+    responses:
+      200:
+        description: Deleted successfully
+      403:
+        description: User assigned to the token does not match currently logged in user
+      404:
+        description: Token not found
