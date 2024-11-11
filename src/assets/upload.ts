@@ -12,7 +12,7 @@ export const uploadAvatar = async (buffer: Buffer, userID: string, avatarHash: s
 }
 
 export const uploadPostImage = async (buffer: Buffer, postID: string, filename: string) => {
-    return upload(buffer, `avatars/${postID}/${filename}`);
+    return upload(buffer, `posts/${postID}/${filename}`);
 }
 
 export const uploadCDN = async (buffer: Buffer, filename: string) => {
