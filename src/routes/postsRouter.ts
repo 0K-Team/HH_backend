@@ -120,7 +120,7 @@ router.put("/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.obj
     res.status(200).send(newPost);
 });
 
-router.post("/like/:id", validateParams(ObjectIdValidatorParams), cache(postCache, undefined, undefined, true), user(), async (req, res) => {
+router.post("/like/:id", validateParams(ObjectIdValidatorParams), cacheDestroy(postPagesCache), cache(postCache, undefined, undefined, true), user(), async (req, res) => {
     const { id } = req.params;
     
     const post = await PostSchema.findByIdAndUpdate(id, {
@@ -133,7 +133,7 @@ router.post("/like/:id", validateParams(ObjectIdValidatorParams), cache(postCach
     res.status(200).send(post);
 });
 
-router.delete("/like/:id", validateParams(ObjectIdValidatorParams), cache(postCache, undefined, undefined, true), user(), async (req, res) => {
+router.delete("/like/:id", validateParams(ObjectIdValidatorParams), cacheDestroy(postPagesCache), cache(postCache, undefined, undefined, true), user(), async (req, res) => {
     const { id } = req.params;
     
     const post = await PostSchema.findByIdAndUpdate(id, {
