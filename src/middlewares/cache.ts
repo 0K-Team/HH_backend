@@ -38,7 +38,7 @@ export const cacheDestroy = (handler: CacheHandler<any>, expectedStatus: number 
 
         res.status = function(code: number) {
             if (expectedStatus == code) handler.drop();
-            return status(code);
+            return status.call(this, code);
         };
 
         next();
