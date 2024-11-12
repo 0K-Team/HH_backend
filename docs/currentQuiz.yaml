@@ -1,0 +1,48 @@
+tags:
+  name: CurrentQuiz
+  description: CDN management and retrieval
+
+  /currentQuiz:
+    post:
+      summary: Save current quiz state
+      tags: [CurrentQuiz]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentQuiz:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    currentQuestionId:
+                      type: integer
+                  required:
+                    - _id
+                    - currentQuestionId
+      responses:
+        200:
+          description: State saved successfully
+        500:
+          description: Error
+
+    get:
+      summary: Get current quiz state
+      tags: [CurrentQuiz]
+      responses:
+        200:
+          description: Current quiz state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  currentQuestionId:
+                    type: integer
+        500:
+          description: Error

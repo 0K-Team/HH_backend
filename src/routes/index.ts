@@ -15,6 +15,7 @@ import eventsRouter from "./eventsRouter";
 import user from "../middlewares/user";
 import calculatorRouter from "./calculatorRouter";
 import locationRouter from './locationRouter';
+import currentQuizRouter from './currentQuiz'
 
 const router = Router();
 
@@ -34,6 +35,8 @@ router.use("/calc", calculatorRouter)
 
 router.use("/preferredTopics", topicsRouter);
 router.use("/locations", locationRouter)
+
+router.use("/currentQuiz", user(), currentQuizRouter)
 
 router.use("/CDN", CDNRouter);
 
