@@ -363,3 +363,27 @@ tags:
                   type: string
                 price:
                   type: number
+
+/admin/locations:
+  post:
+    summary: Add a new location
+    tags: [Admin]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../locations.yaml#/components/schemas/Location'
+  delete:
+    summary: Delete a location
+    tags: [Admin]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              _id:
+                type: string
+                required: true

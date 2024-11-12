@@ -14,6 +14,7 @@ import topicsRouter from "./preferredTopicsRouter";
 import eventsRouter from "./eventsRouter";
 import user from "../middlewares/user";
 import calculatorRouter from "./calculatorRouter";
+import locationRouter from './locationRouter';
 
 const router = Router();
 
@@ -32,6 +33,7 @@ router.use("/events", eventsRouter);
 router.use("/calc", calculatorRouter)
 
 router.use("/preferredTopics", topicsRouter);
+router.use("/locations", locationRouter)
 
 router.use("/CDN", CDNRouter);
 

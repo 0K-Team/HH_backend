@@ -5,6 +5,7 @@ import topics from "./preferredTopics";
 import products from "./products";
 import events from "./events";
 import plants from "./plants";
+import locations from "./locations";
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use("/preferredTopics", topics);
 router.use("/products", products);
 router.use("/events", events);
 router.use("/plants", plants);
+router.use("/locations", locations);
 
 export default router;
