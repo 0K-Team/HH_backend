@@ -73,7 +73,7 @@ router.post("/", validateBody(Joi.object({
     if (validated.error) return res.sendStatus(400), undefined;
 
     const post = await PostSchema.create(validated.value);
-    res.send(post);
+    res.status(200).send(post);
 });
 
 router.delete("/:id", validateParams(ObjectIdValidatorParams), cacheDestroy(postPagesCache), cacheRemove(postCache), user(), async (req, res) => {
@@ -93,7 +93,7 @@ router.delete("/:id", validateParams(ObjectIdValidatorParams), cacheDestroy(post
     if (post && post.author != userID && !user?.admin) return res.sendStatus(403), undefined;
    
     await PostSchema.findByIdAndDelete(id);
-    res.sendStatus(200);
+    res.status(200).send("OK");
 });
 
 router.put("/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.object({
@@ -117,7 +117,7 @@ router.put("/:id", validateParams(ObjectIdValidatorParams), validateBody(Joi.obj
     if (validated.error) return res.sendStatus(400), undefined;
     
     const newPost = await PostSchema.findByIdAndUpdate(id, validated.value);
-    res.send(newPost);
+    res.status(200).send(newPost);
 });
 
 router.post("/like/:id", validateParams(ObjectIdValidatorParams), cache(postCache, undefined, undefined, true), user(), async (req, res) => {
