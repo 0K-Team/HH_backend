@@ -1,6 +1,5 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
-import routes from "./routes";
 import mongoose from "mongoose";
 import "dotenv/config";
 
@@ -14,12 +13,18 @@ import swaggerUi from "swagger-ui-express";
 import cors from "cors";
 import { GardenHandler } from "./handlers/GardenHandler";
 
-dotenv.config();
+import ews from "express-ws"
 
-mongoose.connect(process.env.MONGODB_URL as string)
+dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
+
+ews(app);
+
+import routes from "./routes";
+
+mongoose.connect(process.env.MONGODB_URL as string)
 
 app.use(cors());
 

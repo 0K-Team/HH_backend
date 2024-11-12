@@ -9,6 +9,7 @@ import DeletionTokenSchema from "../schemas/deletionTokens";
 import { deleteUserData } from "../auth/userData";
 
 const router = Router();
+const clients: Map<string, WebSocket> = new Map();
 
 router.get("/google", passport.authenticate("google"));
 router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/", session: false }), async (req, res) => {
@@ -120,6 +121,43 @@ router.delete("/me/token", user(), async (req, res) => {
 
     deleteUserData(user);
     
+    res.sendStatus(200);
+});
+
+router.ws("/qr", async (ws, req) => {
+    if (req.user) return ws.close(4001);
+    const clientID = randomUUID();
+    clients.set(clientID, ws as unknown as WebSocket);
+    const token = jwt.sign(clientID, process.env.JWT_SECRET as string);
+
+    ws.send(JSON.stringify({
+        type: 0,
+        data: token
+    }));
+});
+
+router.post("/qr", user(), async (req, res) => {
+    if (!user) return res.sendStatus(401), undefined;
+    const { token } = req.body;
+    // @ts-ignore
+    const { _id, email, id } = req.user;
+
+    const loginToken = jwt.sign({
+        id: _id,
+        email,
+        accountID: id
+    }, process.env.JWT_SECRET as string);
+
+    if (!clients.has(token)) return res.sendStatus(400), undefined;
+
+    clients.get(token)?.send(JSON.stringify({
+        type: 1,
+        data: loginToken
+    }));
+
+    clients.get(token)?.close(1000);
+    clients.delete(token);
+
     res.sendStatus(200);
 })
 
