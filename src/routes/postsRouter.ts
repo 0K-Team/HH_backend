@@ -7,6 +7,8 @@ import { validateParams, validateQuery, validateBody } from "../middlewares/vali
 import Joi from "joi";
 import { cache, cacheDestroy, cacheRemove } from "../middlewares/cache";
 import { CacheHandler } from "../handlers/CacheHandler";
+import multer from "multer";
+import { uploadPostImage } from "../assets/upload";
 
 const router = Router();
 
@@ -55,24 +57,41 @@ router.get("/:id", validateParams(ObjectIdValidatorParams), cache(postCache), as
     res.send(post);
 });
 
+const upload = multer({
+    limits: {
+        fileSize: 1024 * 1024 * 10
+    }
+});
+
 router.post("/", validateBody(Joi.object({
     content: Joi.string().min(1).max(300).required(),
-    images: Joi.array().items(Joi.string()),
     tags: Joi.array().items(Joi.string().max(64))
-})), cacheDestroy(postPagesCache), user(), async (req, res) => {
+})), upload.array("files"), cacheDestroy(postPagesCache), user(), async (req, res) => {
     // @ts-ignore
     if (!req.user || !req.user.id) return res.sendStatus(401), undefined;
     const {
         content,
-        images,
         tags
     } = req.body;
 
-    // @ts-ignore
-    const validated = PostValidator.validate({author: req.user.id, content, images, tags, date: new Date().toISOString()})
-    if (validated.error) return res.sendStatus(400), undefined;
+    const files = req.files as Express.Multer.File[];
+    const images: string[] = files?.map(f => f.originalname);
 
-    const post = await PostSchema.create(validated.value);
+    const post = await PostSchema.create({
+        // @ts-ignore
+        author: req.user.id,
+        images,
+        content,
+        tags, 
+        date: new Date().toISOString()
+    });
+
+    if (files && files.length > 0) {
+        files.forEach(file => {
+            uploadPostImage(file.buffer, post._id.toString(), file.originalname)
+        })
+    }
+
     res.status(200).send(post);
 });
 
