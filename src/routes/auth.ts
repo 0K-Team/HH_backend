@@ -134,8 +134,9 @@ router.ws("/qr", async (ws, req) => {
 });
 
 router.post("/qr", user(), async (req, res) => {
-    if (!user) return res.sendStatus(401), undefined;
+    if (!req.user) return res.sendStatus(401), undefined;
     const { token } = req.body;
+    console.log(token)
     if (!jwt.verify(token, process.env.JWT_SECRET as string)) return res.sendStatus(403), undefined;
     // @ts-ignore
     const { _id, email, id } = req.user;
@@ -147,7 +148,7 @@ router.post("/qr", user(), async (req, res) => {
     }, process.env.JWT_SECRET as string);
 
     const clientID = jwt.decode(token) as string;
-
+    console.log(clientID);
     if (!clients.has(clientID)) return res.sendStatus(400), undefined;
 
     clients.get(clientID)?.send(`1${loginToken}`);
