@@ -110,3 +110,35 @@ tags:
         description: User assigned to the token does not match currently logged in user
       404:
         description: Token not found
+
+/auth/qr:
+  get:
+    summary: WEBSOCKET ENDPOINT
+    responses:
+      0:
+        description: "Message. If the sent string starts with 0, the string following the 0 contains a new instant login token. If message starts with 1, the following string is the authorization JWT token to be saved in cookies"
+      1000:
+        description: Closed after finished
+      4001:
+        description: Closed. Conflict - client is already logged in
+  post:
+    summary: Finish QR login
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: Instant login token
+    responses:
+      200:
+        description: Authorization token sent successfully (does not necessarily mean successful authentication)
+      400:
+        description: Invalid instant login token
+      401:
+        description: Unautorized
+      403:
+        description: Instant login token can not be validated

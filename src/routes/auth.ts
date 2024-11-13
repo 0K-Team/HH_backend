@@ -130,15 +130,13 @@ router.ws("/qr", async (ws, req) => {
     clients.set(clientID, ws as unknown as WebSocket);
     const token = jwt.sign(clientID, process.env.JWT_SECRET as string);
 
-    ws.send(JSON.stringify({
-        type: 0,
-        data: token
-    }));
+    ws.send(`0${token}`);
 });
 
 router.post("/qr", user(), async (req, res) => {
     if (!user) return res.sendStatus(401), undefined;
     const { token } = req.body;
+    if (!jwt.verify(token, process.env.JWT_SECRET as string)) return res.sendStatus(403), undefined;
     // @ts-ignore
     const { _id, email, id } = req.user;
 
@@ -148,15 +146,14 @@ router.post("/qr", user(), async (req, res) => {
         accountID: id
     }, process.env.JWT_SECRET as string);
 
-    if (!clients.has(token)) return res.sendStatus(400), undefined;
+    const clientID = jwt.decode(token) as string;
 
-    clients.get(token)?.send(JSON.stringify({
-        type: 1,
-        data: loginToken
-    }));
+    if (!clients.has(clientID)) return res.sendStatus(400), undefined;
 
-    clients.get(token)?.close(1000);
-    clients.delete(token);
+    clients.get(clientID)?.send(`1${loginToken}`);
+
+    clients.get(clientID)?.close(1000);
+    clients.delete(clientID);
 
     res.sendStatus(200);
 })
