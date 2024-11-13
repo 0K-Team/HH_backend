@@ -125,10 +125,13 @@ router.delete("/me/token", user(), async (req, res) => {
 });
 
 router.ws("/qr", async (ws, req) => {
+    console.log("Connection established");
     if (req.user) return ws.close(4001);
     const clientID = randomUUID();
+    console.log(clientID);
     clients.set(clientID, ws as unknown as WebSocket);
     const token = jwt.sign(clientID, process.env.JWT_SECRET as string);
+    console.log(token);
 
     ws.send(`0${token}`);
 });

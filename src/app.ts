@@ -13,7 +13,7 @@ import swaggerUi from "swagger-ui-express";
 import cors from "cors";
 import { GardenHandler } from "./handlers/GardenHandler";
 
-import ews from "express-ws"
+import ews from "express-ws";
 
 dotenv.config();
 
