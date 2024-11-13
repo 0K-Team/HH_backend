@@ -61,7 +61,7 @@ components:
               type: string
               description: Opening hours for Sunday
 
-/:
+/locations:
   get:
     summary: Get all locations
     tags: [Locations]
