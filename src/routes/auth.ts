@@ -158,4 +158,16 @@ router.post("/qr", user(), async (req, res) => {
     res.sendStatus(200);
 })
 
+router.post("/jwt", user(), async (req, res) => {
+    // @ts-ignore
+    const { _id, email, id } = req.user;
+    const token = jwt.sign({
+        id: _id,
+        email,
+        accountID: id
+    }, process.env.JWT_SECRET as string);
+    res.cookie("jwt", token);
+    res.sendStatus(200);
+})
+
 export default router;
