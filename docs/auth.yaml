@@ -114,6 +114,7 @@ tags:
 /auth/qr:
   get:
     summary: WEBSOCKET ENDPOINT
+    tags: [Auth]
     responses:
       0:
         description: "Message. If the sent string starts with 0, the string following the 0 contains a new instant login token. If message starts with 1, the following string is the authorization JWT token to be saved in cookies"
@@ -123,6 +124,7 @@ tags:
         description: Closed. Conflict - client is already logged in
   post:
     summary: Finish QR login
+    tags: [Auth]
     requestBody:
       required: true
       content:
