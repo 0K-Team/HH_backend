@@ -191,7 +191,7 @@ router.post("/", validateParams(CalculatorValidator), async (req: Request, res: 
             messages: [
                 {
                     role: "user",
-                    content: `Zaproponuj krótką rekomendację, jak poprawić emisję CO2 u mnie (bez formatowania) (2-3 zdania) (Bez wstępu) (Bez "Aby zmniejszyć emisję CO2" lub czegokolwiek innego) (po polsku) (podane dane to KG_CO2/tydzień) (w energi jest również ogrzewanie)
+                    content: `Zaproponuj krótką rekomendację, jak poprawić emisję CO2 u mnie (bez formatowania) (2-3 zdania) (Bez wstępu) (Bez "Aby zmniejszyć emisję CO2" lub czegokolwiek innego) (po polsku) (podane dane to KG_CO2/tydzień) (w energi jest również ogrzewanie) (lekko zaniż ilości zmniejszenia emisji przy ogrzewaniu/energii o około 30%)
                     car_CO2_emission: ${carEmissionWeek},
                     plane_CO2_emission: ${planeEmissionWeek},
                     public_transport_CO2_emission: ${publicEmissionWeek},
