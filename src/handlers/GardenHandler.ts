@@ -148,17 +148,20 @@ export class GardenHandler {
 
         if (!userActions.wateringRefill) newData.wateringRefill = date;
         else if (userActions.wateringRefill < now) {
-            newData.wateringMaxCount = (userActions.wateringCount ?? 0) + 10;
+            newData.wateringCount = 0;
+            newData.wateringMaxCount = 10;
             newData.wateringRefill = date;
         }
         if (!userActions.fertilizingRefill) newData.fertilizingRefill = date;
         else if (userActions.fertilizingRefill < now) {
-            newData.fertilizingMaxCount = (userActions.fertilizingCount ?? 0) + 10;
+            newData.fertilizingCount = 0;
+            newData.fertilizingMaxCount = 10;
             newData.fertilizingRefill = date;
         }
         if (!userActions.weedsRefill) newData.weedsRefill = date;
         else if (userActions.weedsRefill < now) {
-            newData.weedsMaxRemoved = (userActions.weedsRemoved ?? 0) + 10;
+            newData.weedsRemoved = 0;
+            newData.weedsMaxRemoved = 10;
             newData.weedsRefill = date;
         }
 
@@ -253,22 +256,19 @@ export class GardenHandler {
         const [error, garden, currentPlant] = await GardenHandler.getPlant(user, plant);
         if (error || !garden || !currentPlant) return [error, null];
 
-        if ((currentPlant.wateringNeeded ?? 0) <= 0) return [3, null];
+        if ((currentPlant.weedsRemovedNeeded ?? 0) <= 0) return [3, null];
 
         const userActions = garden.userActions;
 
-        if ((userActions?.wateringCount ?? 0) > (userActions?.wateringMaxCount ?? 10)) return [4, null];
+        if ((userActions?.weedsRemoved ?? 0) > (userActions?.weedsMaxRemoved ?? 10)) return [4, null];
 
         const newPlant = await GardenSchema.findOneAndUpdate({
             user,
             "plants._id": plant
         }, {
             $inc: {
-                "plants.$.wateringNeeded": -1,
-                "userActions.wateringCount": 1
-            },
-            $set: {
-                "plants.$.lastWatered": new Date()
+                "plants.$.weedsRemovedNeeded": -1,
+                "userActions.weedsRemoved": 1
             }
         }, {
             new: true

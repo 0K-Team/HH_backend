@@ -11,9 +11,11 @@ import Joi from "joi";
 const router = Router();
 
 router.get("/me", user(), async (req, res) => {
+    // @ts-ignore
+    const user = req.user.id;
+    await GardenHandler.updateCapabilities(user);
     const garden = await GardenSchema.findOneAndUpdate({
-        // @ts-ignore
-        user: req.user.id
+        user
     }, { }, { upsert: true, new: true });
 
     res.send(garden);
@@ -105,7 +107,7 @@ router.post("/me/action/:id", validateParams(ObjectIdValidatorParams), validateB
         const error = actionRes[0];
         if (error == 1) return res.status(404).send("This user does not have a garden yet"), undefined;
         if (error == 2) return res.status(404).send("This plant does not exist"), undefined;
-        return res.status(400).send("Action rejected"), undefined;
+        return res.status(400).send("Action rejected " + error), undefined;
     }
 
     res.send(actionRes[1]);
