@@ -143,6 +143,29 @@ components:
       404:
         description: Plant not found or the user doesn't have a garden
 
+/garden/me/harvest/{id}:
+  post:
+    tags: [Garden]
+    summary: Sell a plant
+    parameters:
+      - in: path
+        name: id
+        description: ID of the plant (_id field)
+        schema:
+          type: string
+    responses:
+      200:
+        description: Plant sold sucessfully
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Garden'
+      400:
+        description: No plant present or plant doesn't meet the criteria
+      404:
+        description: Plant not found or the user doesn't have a garden
+
 /garden/user/{id}:
   get:
     tags: [Garden]
