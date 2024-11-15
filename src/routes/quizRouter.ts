@@ -1,7 +1,7 @@
 import { Router } from "express";
 import QuizSchema from "../schemas/quizzes";
-import { validateParams, validateQuery } from "../middlewares/validate";
-import { ObjectIdValidatorParams, QuizValidator } from "../validators";
+import { validateBody, validateParams, validateQuery } from "../middlewares/validate";
+import { ObjectIdValidator, ObjectIdValidatorParams, QuizValidator } from "../validators";
 import Joi from "joi";
 import AccountsSchema from "../schemas/accounts";
 import user from "../middlewares/user";
@@ -43,7 +43,13 @@ router.get("/:id", cache(quizCache), validateParams(ObjectIdValidatorParams), as
     }
 })
 
-router.post("/submit", user(), validateQuery(QuizValidator), async (req, res) => {
+router.post("/submit", user(), validateQuery(QuizValidator), validateBody(Joi.object({
+    _id: ObjectIdValidator,
+    answers: Joi.array().items(Joi.object({
+        answer: Joi.string(),
+        _id: ObjectIdValidator
+    }))
+})), async (req, res) => {
     const { _id, answers } = req.body;
     const quiz = await QuizSchema.findById(_id).exec();
 
