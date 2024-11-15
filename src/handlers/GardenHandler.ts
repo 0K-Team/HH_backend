@@ -165,6 +165,10 @@ export class GardenHandler {
             newData.weedsRefill = date;
         }
 
+        if (!userActions.wateringMaxCount) newData.wateringMaxCount = 10;
+        if (!userActions.fertilizingMaxCount) newData.fertilizingMaxCount = 10;
+        if (!userActions.weedsMaxRemoved) newData.weedsMaxRemoved = 10;
+
         if (Object.keys(newData).length > 0) {
             await GardenSchema.updateOne({
                 user
@@ -175,7 +179,7 @@ export class GardenHandler {
     }
 
     static async getPlant(user: string, plant: string): Promise<[number | null, Garden | null, Plant | null]> {
-        GardenHandler.updateCapabilities(user);
+        await GardenHandler.updateCapabilities(user);
         const garden = await GardenSchema.findOne({
             user,
             "plants._id": plant

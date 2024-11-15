@@ -110,7 +110,13 @@ router.post("/me/action/:id", validateParams(ObjectIdValidatorParams), validateB
         return res.status(400).send("Action rejected " + error), undefined;
     }
 
-    res.send(actionRes[1]);
+    await GardenHandler.updateCapabilities(user);
+
+    const newData = await GardenSchema.findOne({
+        user
+    });
+
+    res.send(newData);
 });
 
 router.post("/me/sell/:id", validateParams(ObjectIdValidatorParams), user(), async (req, res) => {
@@ -156,6 +162,53 @@ router.post("/me/sell/:id", validateParams(ObjectIdValidatorParams), user(), asy
     });
 
     res.send(newGarden);
-})
+});
+
+router.post("/me/harvest/:id", validateParams(ObjectIdValidatorParams), user(), async (req, res) => {
+    const { id } = req.params;
+    // @ts-ignore
+    const user = req.user.id;
+
+    const garden = await GardenSchema.findOne({
+        user,
+        "plants._id": id
+    }, {
+        "plants.$": 1
+    });
+
+    const currentPlant = garden ? garden.plants[0] : null;
+
+    if (!currentPlant) return res.sendStatus(404), undefined;
+
+    const plant = await PlantSchema.findOne({
+        type: currentPlant.type
+    });
+
+    if (!plant) return res.sendStatus(400), undefined;
+    if ((currentPlant.growthStage ?? 0) < 4) return res.sendStatus(400), undefined;
+
+    const price = plant.price * currentPlant.growthStage;
+    
+    await AccountSchema.updateOne({
+        id: user
+    }, {
+        $inc: {
+            points: price
+        }
+    });
+
+    const newGarden = await GardenSchema.findOneAndUpdate({
+        user,
+        "plants._id": id
+    }, {
+        $set: {
+            "plants.$.growthStage": 0
+        }
+    }, {
+        new: true
+    });
+
+    res.send(newGarden);
+});
 
 export default router;
