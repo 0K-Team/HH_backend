@@ -71,14 +71,12 @@ router.post("/submit", user(), validateQuery(QuizValidator), validateBody(Joi.ob
             $inc: {points: points}
         }, { new: true }
     ).exec();
-    
-    const result = JSON.stringify({
+
+    res.send({
         answers: correct.map(([id, isCorrect]: [number, boolean]) => ({ id, isCorrect })),
         percentage: percentage,
         pointsAwarded: points
     });
-
-    res.status(200).send(result);
 })
 
 export default router;
