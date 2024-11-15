@@ -55,10 +55,10 @@ router.post("/submit", user(), validateQuery(QuizValidator), validateBody(Joi.ob
 
     const correct = answers.map(((e: { answer: string | null | undefined; _id: string; }) => {
         const question = quiz?.questions?.find(q => q._id.toString() == e._id);
-        return [e._id, question?.correct_answer === e.answer];
+        return [e._id, question?.correct_answer?.toLowerCase() === e.answer?.toLowerCase()];
     }));
 
-    const correctAnswers = correct.filter(Boolean).length;
+    const correctAnswers = correct.filter((a: [string, boolean]) => a[1]).length;
     const percentage = correctAnswers / correct.length;
 
     const points = percentage * (quiz?.points_reward ?? 0); 
@@ -74,7 +74,7 @@ router.post("/submit", user(), validateQuery(QuizValidator), validateBody(Joi.ob
 
     res.send({
         answers: correct.map(([id, isCorrect]: [number, boolean]) => ({ id, isCorrect })),
-        percentage: percentage,
+        percentage: percentage * 100,
         pointsAwarded: points
     });
 })
