@@ -6,6 +6,7 @@ import products from "./products";
 import events from "./events";
 import plants from "./plants";
 import locations from "./locations";
+import quiz from "./quiz";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/products", products);
 router.use("/events", events);
 router.use("/plants", plants);
 router.use("/locations", locations);
+router.use("/quiz", quiz);
 
 export default router;

@@ -44,14 +44,16 @@ router.get("/:id", cache(quizCache), validateParams(ObjectIdValidatorParams), as
 })
 
 router.post("/submit", user(), validateQuery(QuizValidator), validateBody(Joi.object({
-    _id: ObjectIdValidator,
+    _id: ObjectIdValidator.required(),
     answers: Joi.array().items(Joi.object({
         answer: Joi.string(),
         _id: ObjectIdValidator
-    }))
+    })).required()
 })), async (req, res) => {
     const { _id, answers } = req.body;
     const quiz = await QuizSchema.findById(_id).exec();
+
+    if (!quiz) return res.sendStatus(404), undefined;
 
     const correct = answers.map(((e: { answer: string | null | undefined; _id: string; }) => {
         const question = quiz?.questions?.find(q => q._id.toString() == e._id);
