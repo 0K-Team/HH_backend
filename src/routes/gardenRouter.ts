@@ -202,7 +202,10 @@ router.post("/me/harvest/:id", validateParams(ObjectIdValidatorParams), user(), 
         "plants._id": id
     }, {
         $set: {
-            "plants.$.growthStage": 0
+            "plants.$.growthStage": 0,
+            "plants.$.wateringNeeded": Math.floor(Math.random() * 4),
+            "plants.$.fertilizerNeeded": Math.floor(Math.random() * 4),
+            "plants.$.weedsRemovedNeeded": Math.floor(Math.random() * 4)
         }
     }, {
         new: true

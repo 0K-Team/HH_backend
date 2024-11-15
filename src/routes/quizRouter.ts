@@ -47,9 +47,9 @@ router.post("/submit", user(), validateQuery(QuizValidator), async (req, res) =>
     const { _id, answers } = req.body;
     const quiz = await QuizSchema.findById(_id).exec();
 
-    const correct = answers.map(((e: { answer: string | null | undefined; id: number; }) => {
-        const question = quiz?.questions?.[`${e.id}`];
-        return [e.id, question?.correct_answer === e.answer];
+    const correct = answers.map(((e: { answer: string | null | undefined; _id: string; }) => {
+        const question = quiz?.questions?.find(q => q._id.toString() == e._id);
+        return [e._id, question?.correct_answer === e.answer];
     }));
 
     const correctAnswers = correct.filter(Boolean).length;
